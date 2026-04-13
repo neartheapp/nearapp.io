@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support — Near</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy: #050d1a; --blue: #378ADD; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #ffffff; color: #111; }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 60px; background: var(--navy); }
+    .nav-wordmark { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -1px; color: #fff; text-decoration: none; }
+    .nav-wordmark span { color: #378ADD; }
+    .nav-back { font-family: 'DM Sans', sans-serif; font-size: 14px; color: #aaa; text-decoration: none; }
+    .nav-back:hover { color: #fff; }
+    .hero { background: var(--navy); padding: 80px 60px; text-align: center; }
+    .page-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 10px; letter-spacing: 5px; color: #378ADD; margin-bottom: 16px; }
+    h1 { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 48px; letter-spacing: -2px; color: #ffffff; margin-bottom: 16px; }
+    h1 span { color: #378ADD; }
+    .hero-sub { font-size: 17px; color: #aaaaaa; }
+    .content { max-width: 900px; margin: 0 auto; padding: 80px 40px; }
+    .contact-card {
+      background: var(--navy); border-radius: 24px; padding: 60px;
+      text-align: center; margin-bottom: 80px;
+    }
+    .contact-card h2 { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 24px; color: #ffffff; margin-bottom: 12px; letter-spacing: -1px; }
+    .contact-card p { font-size: 16px; color: #aaaaaa; margin-bottom: 32px; }
+    .contact-email {
+      display: inline-block; background: #378ADD; color: #ffffff;
+      padding: 16px 40px; border-radius: 100px; text-decoration: none;
+      font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 16px;
+      transition: opacity 0.2s;
+    }
+    .contact-email:hover { opacity: 0.85; }
+    h2 { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; margin-bottom: 32px; }
+    .faq-list { display: flex; flex-direction: column; gap: 0; }
+    .faq-item { border-bottom: 1px solid #e5e5e5; padding: 24px 0; cursor: pointer; }
+    .faq-q { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 16px; color: #111; display: flex; justify-content: space-between; align-items: center; }
+    .faq-a { font-size: 15px; color: #666; line-height: 1.7; margin-top: 12px; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-arrow { font-size: 20px; color: #378ADD; transition: transform 0.2s; }
+    .faq-item.open .faq-arrow { transform: rotate(45deg); }
+    footer { background: #030810; padding: 40px 60px; text-align: center; }
+    .footer-wordmark { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 16px; }
+    .footer-wordmark span { color: #378ADD; }
+    .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+    .footer-links a { font-size: 13px; color: #666; text-decoration: none; }
+    .footer-copy { font-size: 12px; color: #444; }
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .hero { padding: 60px 24px; }
+      h1 { font-size: 32px; }
+      .content { padding: 60px 24px; }
+      .contact-card { padding: 40px 24px; }
+      footer { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html"><img src="nearblue1.png" alt="Near" style="height: 40px; object-fit: contain;"></a>
+    <a href="index.html" class="nav-back">← Back to home</a>
+  </nav>
+
+  <div class="hero">
+    <div class="page-label">HELP CENTER</div>
+    <h1>How can we <span>help?</span></h1>
+    <p class="hero-sub">Find answers below or reach out to our support team directly.</p>
+  </div>
+
+  <div class="content">
+    <div class="contact-card">
+      <h2>Contact Support</h2>
+      <p>Our team typically responds within 24 hours. For account issues, bans, or appeals — email us directly.</p>
+      <a href="/cdn-cgi/l/email-protection#aad9dfdadac5d8deeac4cfcbd8cbdada84c3c5" class="contact-email"><span class="__cf_email__" data-cfemail="5b282e2b2b34292f1b353e3a293a2b2b753234">[email&#160;protected]</span></a>
+    </div>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">How does Near detect nearby users? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Near checks your GPS location approximately once per minute. When another Near user is within 0.1 miles of you, they appear on your daily nearby list. Your exact location is never shared with other users.</div>
+      </div>
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">Will Near drain my battery? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Near is designed to be battery efficient. It only checks your location once per minute and automatically pauses when you haven't moved. You can also set Active Hours in Settings to limit when location tracking runs.</div>
+      </div>
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">Can other users see my exact location? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">No. Other users only know that you were within 0.1 miles of them at some point during the day. Your exact GPS coordinates are never visible to anyone on the platform.</div>
+      </div>
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">When does my nearby list reset? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Your nearby list resets every day at 4:00 AM in your local time zone. All location data is permanently deleted at this time. Premium users can see 3 days of history.</div>
+      </div>
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">How do I go invisible? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Go to your Profile tab and toggle off "Make me discoverable." You'll immediately disappear from everyone's nearby list but can still see other users. You can also toggle this quickly from the Settings tab.</div>
+      </div>
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">How does the DM system work? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Free users get 1 cold DM per day. If the recipient doesn't reply, you cannot DM them again. If they do reply, the conversation is unlocked with no limits. Premium users get 15 cold DMs per day with no ads required.</div>
+      </div>
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">My account was suspended — what do I do? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">If you believe your account was suspended in error, please email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dba8aeababb4a9af9bb5bebaa9baababf5b2b4">[email&#160;protected]</a> with your username and a description of the situation. We review all appeals within 48 hours.</div>
+      </div>
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">How do I cancel my subscription? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Subscriptions are managed through the App Store (iPhone) or Google Play (Android). Go to your device's subscription settings to cancel. Cancellations take effect at the end of the current billing period.</div>
+      </div>
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">How do I delete my account? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Go to Profile → Settings → Account → Delete Account. Your data will be permanently removed within 30 days. This action cannot be undone.</div>
+      </div>
+      <div class="faq-item" onclick="toggle(this)">
+        <div class="faq-q">How do I report someone? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">On any user's profile page, tap the "..." menu in the top right corner and select "Report this person." Choose a reason and submit. Our team reviews all reports.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-wordmark"><img src="nearblue1.png" alt="Near" style="height: 36px; object-fit: contain; margin-bottom: 16px;"></div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of
