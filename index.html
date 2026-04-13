@@ -253,13 +253,12 @@
       position: absolute;
       bottom: 40px;
       left: 50%;
-      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 8px;
       opacity: 0;
-      animation: fadeUp 0.8s ease forwards 1.2s;
+      animation: fadeUpCenter 0.8s ease forwards 1.2s;
     }
 
     .scroll-line {
@@ -692,6 +691,11 @@
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUpCenter {
+      from { opacity: 0; transform: translateX(-50%) translateY(24px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
 
     @keyframes scrollPulse {
