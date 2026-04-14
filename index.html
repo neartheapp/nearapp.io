@@ -366,6 +366,56 @@
       box-shadow: 0 24px 60px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.07);
       display: block;
       border: 1px solid rgba(0,0,0,0.06);
+      cursor: zoom-in;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .screenshot-img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 32px 72px rgba(0,0,0,0.18), 0 6px 20px rgba(0,0,0,0.10);
+    }
+
+    /* Lightbox */
+    #lb-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    #lb-overlay.open { display: flex; }
+    #lb-img {
+      max-height: 88vh;
+      max-width: 88vw;
+      border-radius: 24px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+      animation: lbIn 0.22s ease;
+    }
+    #lb-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    #lb-close:hover { background: rgba(255,255,255,0.22); }
+    @keyframes lbIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
     }
     .screenshot-caption {
       font-family: 'DM Sans', sans-serif;
@@ -953,35 +1003,35 @@
       <div class="screenshot-intro">IN THE APP</div>
       <div class="screenshot-grid">
         <div class="screenshot-item">
-          <img src="ss-welcome.png" alt="Near welcome screen" class="screenshot-img">
+          <img src="ss-welcome.png" alt="Near welcome screen" class="screenshot-img" onclick="openLightbox(this)">
           <span class="screenshot-caption">Sign up and get started</span>
         </div>
         <div class="screenshot-item">
-          <img src="ss-feed.png" alt="Nearby people feed" class="screenshot-img">
+          <img src="ss-feed.png" alt="Nearby people feed" class="screenshot-img" onclick="openLightbox(this)">
           <span class="screenshot-caption">See everyone near you today</span>
         </div>
         <div class="screenshot-item">
-          <img src="ss-profile-view.png" alt="View a user profile" class="screenshot-img">
+          <img src="ss-profile-view.png" alt="View a user profile" class="screenshot-img" onclick="openLightbox(this)">
           <span class="screenshot-caption">View profiles &amp; tap their socials</span>
         </div>
         <div class="screenshot-item">
-          <img src="ss-unlock.png" alt="Unlock a profile" class="screenshot-img">
+          <img src="ss-unlock.png" alt="Unlock a profile" class="screenshot-img" onclick="openLightbox(this)">
           <span class="screenshot-caption">Reveal names &amp; send a DM</span>
         </div>
         <div class="screenshot-item">
-          <img src="ss-profile-edit.png" alt="Edit your profile" class="screenshot-img">
+          <img src="ss-profile-edit.png" alt="Edit your profile" class="screenshot-img" onclick="openLightbox(this)">
           <span class="screenshot-caption">Build your profile &amp; add socials</span>
         </div>
         <div class="screenshot-item">
-          <img src="ss-settings.png" alt="Privacy &amp; settings" class="screenshot-img">
+          <img src="ss-settings.png" alt="Privacy &amp; settings" class="screenshot-img" onclick="openLightbox(this)">
           <span class="screenshot-caption">Go invisible or set active hours</span>
         </div>
         <div class="screenshot-item">
-          <img src="ss-refer.png" alt="Refer friends" class="screenshot-img">
+          <img src="ss-refer.png" alt="Refer friends" class="screenshot-img" onclick="openLightbox(this)">
           <span class="screenshot-caption">Invite friends &amp; earn rewards</span>
         </div>
         <div class="screenshot-item">
-          <img src="ss-premium.png" alt="Premium plans" class="screenshot-img">
+          <img src="ss-premium.png" alt="Premium plans" class="screenshot-img" onclick="openLightbox(this)">
           <span class="screenshot-caption">Upgrade for exclusive features</span>
         </div>
       </div>
@@ -1330,6 +1380,28 @@
     </div>
     <div class="footer-copy">© 2026 Near. All rights reserved.</div>
   </footer>
+
+  <!-- Lightbox -->
+  <div id="lb-overlay" onclick="closeLightbox()">
+    <button id="lb-close" onclick="closeLightbox()" aria-label="Close">&#x2715;</button>
+    <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
+  </div>
+
+  <script>
+    function openLightbox(img) {
+      document.getElementById('lb-img').src = img.src;
+      document.getElementById('lb-img').alt = img.alt;
+      document.getElementById('lb-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lb-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
 
 </body>
 </html>
