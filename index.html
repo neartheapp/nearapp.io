@@ -39,7 +39,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 9px 60px;
+      padding: 2px 60px;
       background: rgba(5, 13, 26, 0.95);
       backdrop-filter: blur(12px);
     }
@@ -919,7 +919,10 @@
 
       <!-- Left: text + buttons -->
       <div class="near-hero-left" style="flex:1;min-width:0;text-align:center;">
-        <h1 style="font-size:52px;font-weight:700;color:#fff;line-height:1.1;margin:0 0 20px;letter-spacing:-1px;">Discover Who's Around You</h1>
+        <h1 style="font-size:clamp(52px,8vw,88px);font-weight:900;color:#fff;line-height:0.88;margin:0 0 28px;letter-spacing:-2px;display:flex;flex-direction:column;align-items:center;">
+          <span style="display:block;">Discover who's</span>
+          <span style="display:block;margin-top:-0.1em;">around you</span>
+        </h1>
         <p style="font-size:18px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0 auto 36px;max-width:360px;">See who you crossed paths with today. The person at the coffee shop, the gym, the grocery store — they might be near.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
           <a href="#" style="display:flex;align-items:center;gap:9px;background:#fff;color:#050d1a;border-radius:11px;padding:11px 18px;font-size:13px;font-weight:600;text-decoration:none;">
