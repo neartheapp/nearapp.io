@@ -338,6 +338,51 @@
       line-height: 1.7;
     }
 
+    /* Screenshot gallery */
+    .screenshot-intro {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 300;
+      font-size: 10px;
+      letter-spacing: 5px;
+      color: #378ADD;
+      margin-top: 80px;
+      margin-bottom: 32px;
+      text-transform: uppercase;
+    }
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .screenshot-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .screenshot-img {
+      width: 100%;
+      border-radius: 28px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.07);
+      display: block;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .screenshot-caption {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #555;
+      text-align: center;
+      line-height: 1.5;
+    }
+    @media (max-width: 900px) {
+      .screenshot-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .screenshot-intro { margin-top: 60px; }
+    }
+    @media (max-width: 480px) {
+      .screenshot-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    }
+
     /* FEATURES */
     .features {
       padding: 70px 60px;
@@ -867,6 +912,42 @@
           <div class="step-number">04</div>
           <div class="step-title">Resets at 4am</div>
           <p class="step-desc">Every day at 4am your list resets. Fresh start. New day. New people to discover.</p>
+        </div>
+      </div>
+
+      <div class="screenshot-intro">IN THE APP</div>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="ss-welcome.png" alt="Near welcome screen" class="screenshot-img">
+          <span class="screenshot-caption">Sign up or explore as a guest</span>
+        </div>
+        <div class="screenshot-item">
+          <img src="ss-feed.png" alt="Nearby people feed" class="screenshot-img">
+          <span class="screenshot-caption">See everyone near you today</span>
+        </div>
+        <div class="screenshot-item">
+          <img src="ss-profile-view.png" alt="View a user profile" class="screenshot-img">
+          <span class="screenshot-caption">View profiles &amp; tap their socials</span>
+        </div>
+        <div class="screenshot-item">
+          <img src="ss-unlock.png" alt="Unlock a profile" class="screenshot-img">
+          <span class="screenshot-caption">Reveal names &amp; send a DM</span>
+        </div>
+        <div class="screenshot-item">
+          <img src="ss-profile-edit.png" alt="Edit your profile" class="screenshot-img">
+          <span class="screenshot-caption">Build your profile &amp; add socials</span>
+        </div>
+        <div class="screenshot-item">
+          <img src="ss-settings.png" alt="Privacy &amp; settings" class="screenshot-img">
+          <span class="screenshot-caption">Go invisible or set active hours</span>
+        </div>
+        <div class="screenshot-item">
+          <img src="ss-refer.png" alt="Refer friends" class="screenshot-img">
+          <span class="screenshot-caption">Invite friends &amp; earn rewards</span>
+        </div>
+        <div class="screenshot-item">
+          <img src="ss-premium.png" alt="Premium plans" class="screenshot-img">
+          <span class="screenshot-caption">Upgrade for unlimited messaging</span>
         </div>
       </div>
     </div>
