@@ -537,6 +537,12 @@
       text-align: center;
       transition: color 0.28s;
     }
+    .orbital-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
     .orbital-panel {
       max-height: 0;
       overflow: hidden;
@@ -546,32 +552,55 @@
       margin-top: 0;
     }
     .orbital-panel.open {
-      max-height: 160px;
+      max-height: 220px;
       opacity: 1;
-      margin-top: 24px;
+      margin-top: 0;
     }
     .orbital-panel-inner {
       border: 1.5px solid rgba(41,208,245,0.35);
       border-radius: 14px;
-      padding: 20px 24px;
+      padding: 24px 28px;
       display: flex;
       align-items: flex-start;
-      gap: 16px;
+      gap: 18px;
       background: rgba(5,13,26,0.97);
       box-sizing: border-box;
     }
     .panel-title {
       font-family: 'Unbounded', sans-serif;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       color: #29d0f5;
       margin-bottom: 8px;
     }
     .panel-desc {
       font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
+      font-size: 16.5px;
       color: #aaaaaa;
-      line-height: 1.6;
+      line-height: 1.65;
+    }
+    @media (min-width: 1280px) {
+      .orbital-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+      }
+      .orbital-panel {
+        width: 320px;
+        max-width: 320px;
+        max-height: none;
+        margin-top: 0;
+        overflow: visible;
+        transform: translateX(-12px);
+        transition: opacity 0.35s ease, transform 0.35s ease;
+      }
+      .orbital-panel.open {
+        max-height: none;
+        opacity: 1;
+        transform: translateX(0);
+        margin-top: 0;
+      }
     }
     .orbital-hint {
       font-family: 'DM Sans', sans-serif;
@@ -1043,12 +1072,13 @@
 
   <!-- FEATURES -->
   <section class="features" id="features">
-    <div style="max-width:1100px; margin:0 auto;">
+    <div style="max-width:1220px; margin:0 auto;">
       <div class="section-label">FEATURES</div>
       <h2 class="section-title" style="color:#ffffff;">Everything you <span>need</span></h2>
       <p class="section-sub">Built for real life encounters, not endless scrolling.</p>
 
       <div class="orbital-wrap">
+        <div class="orbital-row">
         <div class="orbital-scale-root" id="orbitalScaleRoot">
 
           <!-- ORBITAL CIRCLE -->
@@ -1162,6 +1192,8 @@
 
           </div><!-- /orbital-container -->
 
+        </div><!-- /orbital-scale-root -->
+
           <!-- Info panel -->
           <div class="orbital-panel" id="orbitalPanel">
             <div class="orbital-panel-inner">
@@ -1173,7 +1205,7 @@
             </div>
           </div>
 
-        </div><!-- /orbital-scale-root -->
+        </div><!-- /orbital-row -->
 
         <div class="orbital-hint">Hover to highlight &middot; click for details</div>
       </div><!-- /orbital-wrap -->
