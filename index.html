@@ -1,1424 +1,2087 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Near — Discover Who's Around You</title>
-  <meta name="description" content="Near shows you who you crossed paths with today. Discover the people around you — at the coffee shop, the gym, the grocery store.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --navy: #050d1a;
-      --blue: #378ADD;
-      --red: #E03030;
-      --silver: #A8A8A8;
-      --white: #ffffff;
-      --grey: #aaaaaa;
-      --light-grey: #f5f5f5;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Near — Discover Who's Around You</title>
+    <meta
+      name="description"
+      content="Near shows you who you crossed paths with today. Discover the people around you — at the coffee shop, the gym, the grocery store."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #050d1a;
+        --blue: #378add;
+        --red: #e03030;
+        --silver: #a8a8a8;
+        --white: #ffffff;
+        --grey: #aaaaaa;
+        --light-grey: #f5f5f5;
+      }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    html { scroll-behavior: smooth; }
+      html {
+        scroll-behavior: smooth;
+      }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: #ffffff;
-      color: #111111;
-      overflow-x: hidden;
-    }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: #ffffff;
+        color: #111111;
+        overflow-x: hidden;
+      }
 
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 60px;
-      background: rgba(5, 13, 26, 0.95);
-      backdrop-filter: blur(12px);
-    }
-
-    .nav-logo {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .nav-wordmark {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 700;
-      font-size: 22px;
-      letter-spacing: -1px;
-      color: #ffffff;
-      line-height: 1;
-    }
-
-    .nav-wordmark span { color: #378ADD; }
-
-    .nav-pin {
-      display: flex;
-      align-items: center;
-      margin-top: 3px;
-    }
-
-    .nav-line {
-      height: 1.5px;
-      width: 62px;
-      background: linear-gradient(to right, rgba(168,168,168,0.2), #aaaaaa);
-    }
-
-    .nav-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #E03030;
-      margin-left: 2px;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-    }
-
-    .nav-links a {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: #aaaaaa;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: #ffffff; }
-
-    .nav-cta {
-      background: #378ADD !important;
-      color: #ffffff !important;
-      padding: 10px 24px;
-      border-radius: 100px;
-      font-weight: 500 !important;
-      transition: opacity 0.2s !important;
-    }
-
-    .nav-cta:hover { opacity: 0.85 !important; }
-
-    /* HERO */
-    .hero {
-      min-height: 70vh;
-      background: var(--navy);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 40px 140px;
-      position: relative;
-      overflow: hidden;
-    }
-
-
-    .hero-eyebrow {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 300;
-      font-size: 10px;
-      letter-spacing: 5px;
-      color: #378ADD;
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.2s;
-    }
-
-    .hero-logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 32px;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.4s;
-    }
-
-    .hero-wordmark {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 700;
-      font-size: clamp(72px, 12vw, 140px);
-      letter-spacing: -4px;
-      color: #ffffff;
-      line-height: 1;
-    }
-
-    .hero-wordmark span { color: #378ADD; }
-
-    .hero-pin {
-      display: flex;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .hero-line {
-      height: 2px;
-      background: linear-gradient(to right, rgba(136,136,136,0.2), #cccccc, #aaaaaa);
-      width: clamp(180px, 30vw, 340px);
-    }
-
-    .hero-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #E03030;
-      margin-left: 3px;
-      flex-shrink: 0;
-    }
-
-    .hero-tagline {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 300;
-      font-size: clamp(9px, 1.2vw, 12px);
-      letter-spacing: 4px;
-      color: #aaaaaa;
-      margin-top: 16px;
-    }
-
-    .hero-subtitle {
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(16px, 2.5vw, 22px);
-      color: #aaaaaa;
-      max-width: 520px;
-      line-height: 1.7;
-      margin-bottom: 48px;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.6s;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.8s;
-    }
-
-    .btn-primary {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #378ADD;
-      color: #ffffff;
-      padding: 16px 32px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 500;
-      font-size: 15px;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
-
-    .btn-secondary {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255,255,255,0.08);
-      color: #ffffff;
-      padding: 16px 32px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 500;
-      font-size: 15px;
-      border: 1px solid rgba(255,255,255,0.15);
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .btn-secondary:hover { background: rgba(255,255,255,0.12); transform: translateY(-2px); }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      opacity: 0;
-      animation: fadeUpCenter 0.8s ease forwards 1.2s;
-    }
-
-    .scroll-line {
-      width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, #378ADD, transparent);
-      animation: scrollPulse 2s ease infinite;
-    }
-
-    .scroll-text {
-      font-family: 'Unbounded', sans-serif;
-      font-size: 11px;
-      letter-spacing: 3px;
-      color: #378ADD;
-    }
-
-    /* HOW IT WORKS */
-    .how {
-      padding: 120px 60px;
-      background: #ffffff;
-    }
-
-    .section-label {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 300;
-      font-size: 10px;
-      letter-spacing: 5px;
-      color: #378ADD;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-    }
-
-    .section-title {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 700;
-      font-size: clamp(28px, 4vw, 48px);
-      letter-spacing: -2px;
-      color: #111111;
-      margin-bottom: 16px;
-      line-height: 1.1;
-    }
-
-    .section-title span { color: #378ADD; }
-
-    .section-sub {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 17px;
-      color: #666666;
-      max-width: 500px;
-      line-height: 1.7;
-      margin-bottom: 80px;
-    }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 40px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .step {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .step-number {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 900;
-      font-size: 48px;
-      color: rgba(55, 138, 221, 0.26);
-      line-height: 1;
-    }
-
-    .step-title {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 700;
-      font-size: 18px;
-      color: #111111;
-      letter-spacing: -0.5px;
-    }
-
-    .step-desc {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
-      color: #666666;
-      line-height: 1.7;
-    }
-
-    /* Screenshot gallery */
-    .screenshot-intro {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 300;
-      font-size: 10px;
-      letter-spacing: 5px;
-      color: #378ADD;
-      margin-top: 80px;
-      margin-bottom: 32px;
-      text-transform: uppercase;
-    }
-    .screenshot-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-    }
-    .screenshot-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-    .screenshot-img {
-      width: 100%;
-      border-radius: 28px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.07);
-      display: block;
-      border: 1px solid rgba(0,0,0,0.06);
-      cursor: zoom-in;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .screenshot-img:hover {
-      transform: scale(1.03);
-      box-shadow: 0 32px 72px rgba(0,0,0,0.18), 0 6px 20px rgba(0,0,0,0.10);
-    }
-
-    /* Lightbox */
-    #lb-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-      cursor: zoom-out;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-    }
-    #lb-overlay.open { display: flex; }
-    #lb-img {
-      max-height: 88vh;
-      max-width: 88vw;
-      border-radius: 24px;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-      animation: lbIn 0.22s ease;
-    }
-    #lb-close {
-      position: fixed;
-      top: 20px;
-      right: 24px;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-      border: none;
-      color: #fff;
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-    }
-    #lb-close:hover { background: rgba(255,255,255,0.22); }
-    @keyframes lbIn {
-      from { opacity: 0; transform: scale(0.92); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-    .screenshot-caption {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      color: #555;
-      text-align: center;
-      line-height: 1.5;
-    }
-    @media (max-width: 900px) {
-      .screenshot-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-      .screenshot-intro { margin-top: 60px; }
-    }
-    @media (max-width: 480px) {
-      .screenshot-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    }
-
-    /* FEATURES */
-    .features {
-      padding: 70px 60px;
-      background: var(--navy);
-    }
-    .features .section-title { color: #ffffff; }
-    .features .section-sub { color: #aaaaaa; margin-bottom: 8px; }
-
-    /* ORBITAL LAYOUT */
-    .orbital-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 8px;
-    }
-    .orbital-scale-root {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .orbital-container {
-      position: relative;
-      width: 805px;
-      height: 805px;
-      flex-shrink: 0;
-    }
-    .orbit-ring {
-      position: absolute;
-      border-radius: 50%;
-      border: 1px dashed rgba(41,208,245,0.12);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-    .orbit-ring-outer { width: 560px; height: 560px; }
-    .orbit-ring-inner { width: 301px; height: 301px; }
-    .orbit-center {
-      position: absolute;
-      width: 163px;
-      height: 163px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 38% 38%, #29d0f5, #1270c8);
-      box-shadow: 0 0 0 21px rgba(41,208,245,0.09), 0 0 0 44px rgba(41,208,245,0.04);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-    }
-    .orbit-connector-svg {
-      position: absolute;
-      top: 0; left: 0;
-      width: 805px; height: 805px;
-      overflow: visible;
-      pointer-events: none;
-      z-index: 1;
-    }
-    .orbit-connector-svg line {
-      stroke: #29d0f5;
-      stroke-width: 1;
-      opacity: 0.13;
-      transition: opacity 0.28s, stroke-width 0.28s;
-    }
-    .orbit-connector-svg line.active {
-      opacity: 1;
-      stroke-width: 2;
-      filter: drop-shadow(0 0 5px rgba(41,208,245,0.8));
-    }
-    .feature-node {
-      position: absolute;
-      width: 138px;
-      height: 138px;
-      border-radius: 50%;
-      background: rgba(5,13,26,0.97);
-      border: 1.5px solid rgba(41,208,245,0.2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 3;
-      transition: transform 0.28s cubic-bezier(.34,1.56,.64,1), border-color 0.28s, background 0.28s;
-      text-align: center;
-      gap: 5px;
-      padding: 8px;
-      box-sizing: border-box;
-    }
-    .feature-node:hover, .feature-node.active {
-      transform: scale(1.18);
-      border-color: rgba(41,208,245,0.85);
-      background: rgba(41,208,245,0.09);
-    }
-    .feature-node:hover .fn-label, .feature-node.active .fn-label { color: #29d0f5; }
-    .fn-label {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.3;
-      text-align: center;
-      transition: color 0.28s;
-    }
-    .orbital-row {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-      width: 100%;
-    }
-    .orbital-panel {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.4s ease, opacity 0.3s ease;
-      width: 805px;
-      margin-top: 0;
-    }
-    .orbital-panel.open {
-      max-height: 800px;
-      opacity: 1;
-      margin-top: 0;
-    }
-    .orbital-panel-inner {
-      border: 1.5px solid rgba(41,208,245,0.35);
-      border-radius: 14px;
-      padding: 24px 28px;
-      display: flex;
-      align-items: flex-start;
-      gap: 18px;
-      background: rgba(5,13,26,0.97);
-      box-sizing: border-box;
-    }
-    .panel-title {
-      font-family: 'Unbounded', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: #29d0f5;
-      margin-bottom: 8px;
-    }
-    .panel-desc {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16.5px;
-      color: #aaaaaa;
-      line-height: 1.65;
-    }
-    @media (min-width: 1280px) {
-      .orbital-row {
-        flex-direction: row;
+      /* NAV */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
         align-items: center;
-        justify-content: flex-end;
-        gap: 28px;
+        justify-content: space-between;
+        padding: 0 60px;
+        background: rgba(5, 13, 26, 0.95);
+        backdrop-filter: blur(12px);
+      }
+
+      .nav-logo {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .nav-wordmark {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        letter-spacing: -1px;
+        color: #ffffff;
+        line-height: 1;
+      }
+
+      .nav-wordmark span {
+        color: #378add;
+      }
+
+      .nav-pin {
+        display: flex;
+        align-items: center;
+        margin-top: 3px;
+      }
+
+      .nav-line {
+        height: 1.5px;
+        width: 62px;
+        background: linear-gradient(
+          to right,
+          rgba(168, 168, 168, 0.2),
+          #aaaaaa
+        );
+      }
+
+      .nav-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #e03030;
+        margin-left: 2px;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .nav-links a {
+        font-family: "DM Sans", sans-serif;
+        font-size: 14px;
+        color: #aaaaaa;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: #ffffff;
+      }
+
+      .nav-cta {
+        background: #378add !important;
+        color: #ffffff !important;
+        padding: 10px 24px;
+        border-radius: 100px;
+        font-weight: 500 !important;
+        transition: opacity 0.2s !important;
+      }
+
+      .nav-cta:hover {
+        opacity: 0.85 !important;
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 70vh;
+        background: var(--navy);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 120px 40px 140px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-eyebrow {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 300;
+        font-size: 10px;
+        letter-spacing: 5px;
+        color: #378add;
+        margin-bottom: 40px;
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards 0.2s;
+      }
+
+      .hero-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 32px;
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards 0.4s;
+      }
+
+      .hero-wordmark {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 700;
+        font-size: clamp(72px, 12vw, 140px);
+        letter-spacing: -4px;
+        color: #ffffff;
+        line-height: 1;
+      }
+
+      .hero-wordmark span {
+        color: #378add;
+      }
+
+      .hero-pin {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      .hero-line {
+        height: 2px;
+        background: linear-gradient(
+          to right,
+          rgba(136, 136, 136, 0.2),
+          #cccccc,
+          #aaaaaa
+        );
+        width: clamp(180px, 30vw, 340px);
+      }
+
+      .hero-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #e03030;
+        margin-left: 3px;
+        flex-shrink: 0;
+      }
+
+      .hero-tagline {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 300;
+        font-size: clamp(9px, 1.2vw, 12px);
+        letter-spacing: 4px;
+        color: #aaaaaa;
+        margin-top: 16px;
+      }
+
+      .hero-subtitle {
+        font-family: "DM Sans", sans-serif;
+        font-size: clamp(16px, 2.5vw, 22px);
+        color: #aaaaaa;
+        max-width: 520px;
+        line-height: 1.7;
+        margin-bottom: 48px;
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards 0.6s;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards 0.8s;
+      }
+
+      .btn-primary {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #378add;
+        color: #ffffff;
+        padding: 16px 32px;
+        border-radius: 100px;
+        text-decoration: none;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        font-size: 15px;
+        transition:
+          opacity 0.2s,
+          transform 0.2s;
+      }
+
+      .btn-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        padding: 16px 32px;
+        border-radius: 100px;
+        text-decoration: none;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        font-size: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-2px);
+      }
+
+      .hero-scroll {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        opacity: 0;
+        animation: fadeUpCenter 0.8s ease forwards 1.2s;
+      }
+
+      .scroll-line {
+        width: 1px;
+        height: 40px;
+        background: linear-gradient(to bottom, #378add, transparent);
+        animation: scrollPulse 2s ease infinite;
+      }
+
+      .scroll-text {
+        font-family: "Unbounded", sans-serif;
+        font-size: 11px;
+        letter-spacing: 3px;
+        color: #378add;
+      }
+
+      /* HOW IT WORKS */
+      .how {
+        padding: 120px 60px;
+        background: #ffffff;
+      }
+
+      .section-label {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 300;
+        font-size: 10px;
+        letter-spacing: 5px;
+        color: #378add;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+      }
+
+      .section-title {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 700;
+        font-size: clamp(28px, 4vw, 48px);
+        letter-spacing: -2px;
+        color: #111111;
+        margin-bottom: 16px;
+        line-height: 1.1;
+      }
+
+      .section-title span {
+        color: #378add;
+      }
+
+      .section-sub {
+        font-family: "DM Sans", sans-serif;
+        font-size: 17px;
+        color: #666666;
+        max-width: 500px;
+        line-height: 1.7;
+        margin-bottom: 80px;
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 40px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .step {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .step-number {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 900;
+        font-size: 48px;
+        color: rgba(55, 138, 221, 0.26);
+        line-height: 1;
+      }
+
+      .step-title {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: #111111;
+        letter-spacing: -0.5px;
+      }
+
+      .step-desc {
+        font-family: "DM Sans", sans-serif;
+        font-size: 15px;
+        color: #666666;
+        line-height: 1.7;
+      }
+
+      /* Screenshot gallery */
+      .screenshot-intro {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 300;
+        font-size: 10px;
+        letter-spacing: 5px;
+        color: #378add;
+        margin-top: 80px;
+        margin-bottom: 32px;
+        text-transform: uppercase;
+      }
+      .screenshot-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+      }
+      .screenshot-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+      .screenshot-img {
+        width: 100%;
+        border-radius: 28px;
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.13),
+          0 4px 16px rgba(0, 0, 0, 0.07);
+        display: block;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        cursor: zoom-in;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .screenshot-img:hover {
+        transform: scale(1.03);
+        box-shadow:
+          0 32px 72px rgba(0, 0, 0, 0.18),
+          0 6px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Lightbox */
+      #lb-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.88);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        cursor: zoom-out;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+      #lb-overlay.open {
+        display: flex;
+      }
+      #lb-img {
+        max-height: 88vh;
+        max-width: 88vw;
+        border-radius: 24px;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+        animation: lbIn 0.22s ease;
+      }
+      #lb-close {
+        position: fixed;
+        top: 20px;
+        right: 24px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.12);
+        border: none;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+      #lb-close:hover {
+        background: rgba(255, 255, 255, 0.22);
+      }
+      @keyframes lbIn {
+        from {
+          opacity: 0;
+          transform: scale(0.92);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .screenshot-caption {
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: #555;
+        text-align: center;
+        line-height: 1.5;
+      }
+      @media (max-width: 900px) {
+        .screenshot-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+        .screenshot-intro {
+          margin-top: 60px;
+        }
+      }
+      @media (max-width: 480px) {
+        .screenshot-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 14px;
+        }
+      }
+
+      /* FEATURES */
+      .features {
+        padding: 70px 60px;
+        background: var(--navy);
+      }
+      .features .section-title {
+        color: #ffffff;
+      }
+      .features .section-sub {
+        color: #aaaaaa;
+        margin-bottom: 8px;
+      }
+
+      /* ORBITAL LAYOUT */
+      .orbital-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .orbital-scale-root {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .orbital-container {
+        position: relative;
+        width: 805px;
+        height: 805px;
+        flex-shrink: 0;
+      }
+      .orbit-ring {
+        position: absolute;
+        border-radius: 50%;
+        border: 1px dashed rgba(41, 208, 245, 0.12);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .orbit-ring-outer {
+        width: 560px;
+        height: 560px;
+      }
+      .orbit-ring-inner {
+        width: 301px;
+        height: 301px;
+      }
+      .orbit-center {
+        position: absolute;
+        width: 163px;
+        height: 163px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 38% 38%, #29d0f5, #1270c8);
+        box-shadow:
+          0 0 0 21px rgba(41, 208, 245, 0.09),
+          0 0 0 44px rgba(41, 208, 245, 0.04);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+      }
+      .orbit-connector-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 805px;
+        height: 805px;
+        overflow: visible;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .orbit-connector-svg line {
+        stroke: #29d0f5;
+        stroke-width: 1;
+        opacity: 0.13;
+        transition:
+          opacity 0.28s,
+          stroke-width 0.28s;
+      }
+      .orbit-connector-svg line.active {
+        opacity: 1;
+        stroke-width: 2;
+        filter: drop-shadow(0 0 5px rgba(41, 208, 245, 0.8));
+      }
+      .feature-node {
+        position: absolute;
+        width: 138px;
+        height: 138px;
+        border-radius: 50%;
+        background: rgba(5, 13, 26, 0.97);
+        border: 1.5px solid rgba(41, 208, 245, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 3;
+        transition:
+          transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+          border-color 0.28s,
+          background 0.28s;
+        text-align: center;
+        gap: 5px;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      .feature-node:hover,
+      .feature-node.active {
+        transform: scale(1.18);
+        border-color: rgba(41, 208, 245, 0.85);
+        background: rgba(41, 208, 245, 0.09);
+      }
+      .feature-node:hover .fn-label,
+      .feature-node.active .fn-label {
+        color: #29d0f5;
+      }
+      .fn-label {
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.3;
+        text-align: center;
+        transition: color 0.28s;
+      }
+      .orbital-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        width: 100%;
       }
       .orbital-panel {
-        width: 320px;
-        max-width: 320px;
-        max-height: none;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+          max-height 0.4s ease,
+          opacity 0.3s ease;
+        width: 805px;
         margin-top: 0;
-        overflow: visible;
-        transform: translateX(-12px);
-        transition: opacity 0.35s ease, transform 0.35s ease;
       }
       .orbital-panel.open {
-        max-height: none;
+        max-height: 800px;
         opacity: 1;
-        transform: translateX(0);
         margin-top: 0;
       }
-    }
-    .orbital-hint {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 11.5px;
-      color: rgba(255,255,255,0.6);
-      margin-top: 20px;
-      text-align: center;
-    }
+      .orbital-panel-inner {
+        border: 1.5px solid rgba(41, 208, 245, 0.35);
+        border-radius: 14px;
+        padding: 24px 28px;
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        background: rgba(5, 13, 26, 0.97);
+        box-sizing: border-box;
+      }
+      .panel-title {
+        font-family: "Unbounded", sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #29d0f5;
+        margin-bottom: 8px;
+      }
+      .panel-desc {
+        font-family: "DM Sans", sans-serif;
+        font-size: 16.5px;
+        color: #aaaaaa;
+        line-height: 1.65;
+      }
+      @media (min-width: 1280px) {
+        .orbital-row {
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 28px;
+        }
+        .orbital-panel {
+          width: 320px;
+          max-width: 320px;
+          max-height: none;
+          margin-top: 0;
+          overflow: visible;
+          transform: translateX(-12px);
+          transition:
+            opacity 0.35s ease,
+            transform 0.35s ease;
+        }
+        .orbital-panel.open {
+          max-height: none;
+          opacity: 1;
+          transform: translateX(0);
+          margin-top: 0;
+        }
+      }
+      .orbital-hint {
+        font-family: "DM Sans", sans-serif;
+        font-size: 11.5px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 20px;
+        text-align: center;
+      }
 
-    /* PRIVACY */
-    .privacy-section {
-      padding: 120px 60px;
-      background: #f8fafc;
-      display: flex;
-      align-items: center;
-      gap: 80px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+      /* PRIVACY */
+      .privacy-section {
+        padding: 120px 60px;
+        background: #f8fafc;
+        display: flex;
+        align-items: center;
+        gap: 80px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    .privacy-content { flex: 1; }
+      .privacy-content {
+        flex: 1;
+      }
 
-    .privacy-badges {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+      .privacy-badges {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
 
-    .privacy-badge {
-      background: #ffffff;
-      border: 1px solid #e5e5e5;
-      border-radius: 16px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+      .privacy-badge {
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
 
-    .badge-icon { font-size: 24px; }
+      .badge-icon {
+        font-size: 24px;
+      }
 
-    .badge-title {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      color: #111111;
-      letter-spacing: -0.3px;
-    }
+      .badge-title {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 700;
+        font-size: 13px;
+        color: #111111;
+        letter-spacing: -0.3px;
+      }
 
-    .badge-desc {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: #888888;
-      line-height: 1.5;
-    }
+      .badge-desc {
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        color: #888888;
+        line-height: 1.5;
+      }
 
-    /* PRICING */
-    .pricing {
-      padding: 120px 60px;
-      background: #ffffff;
-      text-align: center;
-    }
+      /* PRICING */
+      .pricing {
+        padding: 120px 60px;
+        background: #ffffff;
+        text-align: center;
+      }
 
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
 
-    .pricing-card {
-      border: 1px solid #e5e5e5;
-      border-radius: 24px;
-      padding: 40px 32px;
-      text-align: left;
-      position: relative;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+      .pricing-card {
+        border: 1px solid #e5e5e5;
+        border-radius: 24px;
+        padding: 40px 32px;
+        text-align: left;
+        position: relative;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
 
-    .pricing-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
+      .pricing-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      }
 
-    .pricing-card.featured {
-      border-color: #378ADD;
-      background: var(--navy);
-    }
+      .pricing-card.featured {
+        border-color: #378add;
+        background: var(--navy);
+      }
 
-    .featured-badge {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #378ADD;
-      color: #ffffff;
-      font-family: 'Unbounded', sans-serif;
-      font-size: 9px;
-      letter-spacing: 2px;
-      padding: 5px 16px;
-      border-radius: 100px;
-    }
+      .featured-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #378add;
+        color: #ffffff;
+        font-family: "Unbounded", sans-serif;
+        font-size: 9px;
+        letter-spacing: 2px;
+        padding: 5px 16px;
+        border-radius: 100px;
+      }
 
-    .plan-name {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: -0.3px;
-      margin-bottom: 8px;
-    }
+      .plan-name {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: -0.3px;
+        margin-bottom: 8px;
+      }
 
-    .pricing-card.featured .plan-name { color: #ffffff; }
+      .pricing-card.featured .plan-name {
+        color: #ffffff;
+      }
 
-    .plan-price {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 900;
-      font-size: 40px;
-      letter-spacing: -2px;
-      color: #111111;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
+      .plan-price {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 900;
+        font-size: 40px;
+        letter-spacing: -2px;
+        color: #111111;
+        line-height: 1;
+        margin-bottom: 4px;
+      }
 
-    .pricing-card.featured .plan-price { color: #ffffff; }
+      .pricing-card.featured .plan-price {
+        color: #ffffff;
+      }
 
-    .plan-period {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: #888888;
-      margin-bottom: 28px;
-    }
+      .plan-period {
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        color: #888888;
+        margin-bottom: 28px;
+      }
 
-    .plan-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
+      .plan-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 32px;
+      }
 
-    .plan-features li {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: #444444;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+      .plan-features li {
+        font-family: "DM Sans", sans-serif;
+        font-size: 14px;
+        color: #444444;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-    .pricing-card.featured .plan-features li { color: #aaaaaa; }
+      .pricing-card.featured .plan-features li {
+        color: #aaaaaa;
+      }
 
-    .check { color: #378ADD; font-weight: 700; }
+      .check {
+        color: #378add;
+        font-weight: 700;
+      }
 
-    .plan-btn {
-      display: block;
-      text-align: center;
-      padding: 14px;
-      border-radius: 100px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 500;
-      font-size: 14px;
-      text-decoration: none;
-      transition: opacity 0.2s;
-    }
+      .plan-btn {
+        display: block;
+        text-align: center;
+        padding: 14px;
+        border-radius: 100px;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        text-decoration: none;
+        transition: opacity 0.2s;
+      }
 
-    .plan-btn-primary {
-      background: #378ADD;
-      color: #ffffff;
-    }
+      .plan-btn-primary {
+        background: #378add;
+        color: #ffffff;
+      }
 
-    .plan-btn-outline {
-      border: 1px solid #e5e5e5;
-      color: #111111;
-    }
+      .plan-btn-outline {
+        border: 1px solid #e5e5e5;
+        color: #111111;
+      }
 
-    .plan-btn:hover { opacity: 0.85; }
+      .plan-btn:hover {
+        opacity: 0.85;
+      }
 
-    /* DOWNLOAD */
-    .download {
-      padding: 120px 60px 32px;
-      background: var(--navy);
-      text-align: center;
-    }
+      /* DOWNLOAD */
+      .download {
+        padding: 120px 60px 32px;
+        background: var(--navy);
+        text-align: center;
+      }
 
-    .download .section-title { color: #ffffff; }
-    .download .section-sub { color: #aaaaaa; margin: 0 auto 48px; }
+      .download .section-title {
+        color: #ffffff;
+      }
+      .download .section-sub {
+        color: #aaaaaa;
+        margin: 0 auto 48px;
+      }
 
-    .download-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+      .download-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
 
-    .store-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #ffffff;
-      padding: 14px 28px;
-      border-radius: 100px;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
+      .store-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        padding: 14px 28px;
+        border-radius: 100px;
+        text-decoration: none;
+        transition: background 0.2s;
+      }
 
-    .store-btn:hover { background: rgba(255,255,255,0.14); }
+      .store-btn:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
 
-    .store-label {
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-    }
+      .store-label {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+      }
 
-    .store-sub {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 10px;
-      color: #aaaaaa;
-    }
+      .store-sub {
+        font-family: "DM Sans", sans-serif;
+        font-size: 10px;
+        color: #aaaaaa;
+      }
 
-    .store-name {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 700;
-      font-size: 15px;
-    }
+      .store-name {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+      }
 
-    /* FOOTER */
-    footer {
-      background: #050d1a;
-      padding: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 24px;
-    }
+      /* FOOTER */
+      footer {
+        background: #050d1a;
+        padding: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
 
-    .footer-logo {
-      display: flex;
-      flex-direction: column;
-    }
+      .footer-logo {
+        display: flex;
+        flex-direction: column;
+      }
 
-    .footer-wordmark {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 700;
-      font-size: 18px;
-      letter-spacing: -1px;
-      color: #ffffff;
-    }
+      .footer-wordmark {
+        font-family: "Unbounded", sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: -1px;
+        color: #ffffff;
+      }
 
-    .footer-wordmark span { color: #378ADD; }
+      .footer-wordmark span {
+        color: #378add;
+      }
 
-    .footer-pin {
-      display: flex;
-      align-items: center;
-      margin-top: 3px;
-    }
+      .footer-pin {
+        display: flex;
+        align-items: center;
+        margin-top: 3px;
+      }
 
-    .footer-line {
-      height: 1.5px;
-      width: 50px;
-      background: linear-gradient(to right, rgba(168,168,168,0.2), #888888);
-    }
+      .footer-line {
+        height: 1.5px;
+        width: 50px;
+        background: linear-gradient(
+          to right,
+          rgba(168, 168, 168, 0.2),
+          #888888
+        );
+      }
 
-    .footer-dot {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: #E03030;
-      margin-left: 2px;
-    }
+      .footer-dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #e03030;
+        margin-left: 2px;
+      }
 
-    .footer-links {
-      display: flex;
-      gap: 32px;
-      flex-wrap: wrap;
-    }
+      .footer-links {
+        display: flex;
+        gap: 32px;
+        flex-wrap: wrap;
+      }
 
-    .footer-links a {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: #666666;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
+      .footer-links a {
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        color: #666666;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
 
-    .footer-links a:hover { color: #aaaaaa; }
+      .footer-links a:hover {
+        color: #aaaaaa;
+      }
 
-    .footer-copy {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      color: #444444;
-    }
+      .footer-copy {
+        font-family: "DM Sans", sans-serif;
+        font-size: 12px;
+        color: #444444;
+      }
 
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+      /* ANIMATIONS */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-    @keyframes fadeUpCenter {
-      from { opacity: 0; transform: translateX(-50%) translateY(24px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
+      @keyframes fadeUpCenter {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
 
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
+      @keyframes scrollPulse {
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      nav { padding: 16px 24px; }
-      .nav-links { display: none; }
-      .how, .features, .pricing, .download { padding: 80px 24px; }
-      .orbital-panel { width: 100%; }
-      .privacy-section { flex-direction: column; padding: 80px 24px; }
-      .privacy-badges { grid-template-columns: 1fr; }
-      footer { padding: 40px 24px; flex-direction: column; align-items: flex-start; }
-    }
-  </style>
-</head>
-<body>
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        nav {
+          padding: 16px 24px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .how,
+        .features,
+        .pricing,
+        .download {
+          padding: 80px 24px;
+        }
+        .orbital-panel {
+          width: 100%;
+        }
+        .privacy-section {
+          flex-direction: column;
+          padding: 80px 24px;
+        }
+        .privacy-badges {
+          grid-template-columns: 1fr;
+        }
+        footer {
+          padding: 40px 24px;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <a href="index.html"
+        ><img
+          src="NEARBLUE-NoTag.png"
+          alt="Near"
+          style="height: 78px; object-fit: contain"
+      /></a>
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="contact.html">Contact</a>
+        <a href="#download" class="nav-cta">Download</a>
+      </div>
+    </nav>
 
-  <!-- NAV -->
-  <nav>
-    <a href="index.html"><img src="NEARBLUE-NoTag.png" alt="Near" style="height: 78px; object-fit: contain;"></a>
-    <div class="nav-links">
-      <a href="#how">How it works</a>
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="contact.html">Contact</a>
-      <a href="#download" class="nav-cta">Download</a>
-    </div>
-  </nav>
+    <!-- HERO -->
+    <section
+      style="
+        background: #050d1a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 110px 48px 56px;
+        position: relative;
+        overflow: hidden;
+      "
+    >
+      <div
+        style="
+          position: absolute;
+          right: 30%;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 520px;
+          height: 520px;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle,
+            rgba(41, 208, 245, 0.05) 0%,
+            transparent 70%
+          );
+          pointer-events: none;
+        "
+      ></div>
 
-  <!-- HERO -->
-  <section style="background:#050d1a;display:flex;align-items:center;justify-content:center;padding:110px 48px 56px;position:relative;overflow:hidden;">
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          gap: 64px;
+          max-width: 960px;
+          width: 100%;
+          z-index: 2;
+        "
+      >
+        <!-- Left: text + buttons -->
+        <div
+          class="near-hero-left"
+          style="flex: 1; min-width: 0; text-align: center"
+        >
+          <h1
+            style="
+              font-size: clamp(40px, 6vw, 76px);
+              font-weight: 900;
+              color: #fff;
+              line-height: 0.88;
+              margin: 0 0 28px;
+              letter-spacing: -2px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+            "
+          >
+            <span style="display: block">Discover who's</span>
+            <span style="display: block; margin-top: 30px">around you</span>
+          </h1>
+          <p
+            style="
+              font-size: 19px;
+              color: rgba(255, 255, 255, 0.5);
+              line-height: 1.7;
+              margin: 0 auto 36px;
+              max-width: 360px;
+            "
+          >
+            See who you crossed paths with today. The person at the coffee shop,
+            the gym, the grocery store — they might be near.
+          </p>
+          <div
+            style="
+              display: flex;
+              gap: 31px;
+              flex-wrap: wrap;
+              justify-content: center;
+            "
+          >
+            <a
+              href="#"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 11px;
+                background: #fff;
+                color: #050d1a;
+                border-radius: 100px;
+                padding: 14px 23px;
+                font-size: 16px;
+                font-weight: 600;
+                text-decoration: none;
+              "
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#050d1a">
+                <path
+                  d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"
+                />
+              </svg>
+              <span
+                ><span
+                  style="
+                    font-size: 12px;
+                    opacity: 0.55;
+                    display: block;
+                    font-weight: 400;
+                  "
+                  >Download on the</span
+                >App Store</span
+              >
+            </a>
+            <a
+              href="#"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 11px;
+                background: rgba(255, 255, 255, 0.07);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                border-radius: 100px;
+                padding: 14px 23px;
+                font-size: 16px;
+                font-weight: 600;
+                text-decoration: none;
+              "
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#29d0f5">
+                <path
+                  d="M3.18 23.76c.3.17.64.22.99.14l12.2-7.05-2.6-2.6-10.59 9.51zm-1.9-20.2C1.1 3.85 1 4.19 1 4.58v14.84c0 .39.1.73.28 1.02l.06.05 8.31-8.31v-.2L1.34 3.5l-.06.06zM20.49 10.7l-2.83-1.63-2.93 2.93 2.93 2.93 2.85-1.65c.81-.47.81-1.23-.02-1.58zM4.17.24L16.37 7.3l-2.6 2.6L3.18.39c.3-.17.65-.2.99-.15z"
+                />
+              </svg>
+              <span
+                ><span
+                  style="
+                    font-size: 12px;
+                    opacity: 0.55;
+                    display: block;
+                    font-weight: 400;
+                  "
+                  >Get it on</span
+                >Google Play</span
+              >
+            </a>
+          </div>
+        </div>
 
-    <div style="position:absolute;right:30%;top:50%;transform:translateY(-50%);width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(41,208,245,0.05) 0%,transparent 70%);pointer-events:none;"></div>
-
-    <div style="display:flex;align-items:center;gap:64px;max-width:960px;width:100%;z-index:2;">
-
-      <!-- Left: text + buttons -->
-      <div class="near-hero-left" style="flex:1;min-width:0;text-align:center;">
-        <h1 style="font-size:clamp(40px,6vw,76px);font-weight:900;color:#fff;line-height:0.88;margin:0 0 28px;letter-spacing:-2px;display:flex;flex-direction:column;align-items:center;">
-          <span style="display:block;">Discover who's</span>
-          <span style="display:block;margin-top:30px;">around you</span>
-        </h1>
-        <p style="font-size:19px;color:rgba(255,255,255,0.5);line-height:1.7;margin:0 auto 36px;max-width:360px;">See who you crossed paths with today. The person at the coffee shop, the gym, the grocery store — they might be near.</p>
-        <div style="display:flex;gap:31px;flex-wrap:wrap;justify-content:center;">
-          <a href="#" style="display:flex;align-items:center;gap:11px;background:#fff;color:#050d1a;border-radius:100px;padding:14px 23px;font-size:16px;font-weight:600;text-decoration:none;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="#050d1a"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-            <span><span style="font-size:12px;opacity:0.55;display:block;font-weight:400;">Download on the</span>App Store</span>
-          </a>
-          <a href="#" style="display:flex;align-items:center;gap:11px;background:rgba(255,255,255,0.07);color:#fff;border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:14px 23px;font-size:16px;font-weight:600;text-decoration:none;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="#29d0f5"><path d="M3.18 23.76c.3.17.64.22.99.14l12.2-7.05-2.6-2.6-10.59 9.51zm-1.9-20.2C1.1 3.85 1 4.19 1 4.58v14.84c0 .39.1.73.28 1.02l.06.05 8.31-8.31v-.2L1.34 3.5l-.06.06zM20.49 10.7l-2.83-1.63-2.93 2.93 2.93 2.93 2.85-1.65c.81-.47.81-1.23-.02-1.58zM4.17.24L16.37 7.3l-2.6 2.6L3.18.39c.3-.17.65-.2.99-.15z"/></svg>
-            <span><span style="font-size:12px;opacity:0.55;display:block;font-weight:400;">Get it on</span>Google Play</span>
-          </a>
+        <!-- Right: hero phones image -->
+        <div
+          class="near-hero-phones"
+          style="position: relative; width: 340px; flex-shrink: 0"
+        >
+          <img
+            src="hero-phones.png"
+            alt="Near app on two phones"
+            style="width: 100%; height: auto; display: block"
+          />
         </div>
       </div>
+    </section>
 
-      <!-- Right: hero phones image -->
-      <div class="near-hero-phones" style="position:relative;width:340px;flex-shrink:0;">
-        <img src="hero-phones.png" alt="Near app on two phones" style="width:100%;height:auto;display:block;"/>
+    <style>
+      @media (max-width: 768px) {
+        .near-hero-phones {
+          display: none;
+        }
+        .near-hero-left {
+          max-width: 100% !important;
+        }
+      }
+    </style>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how">
+      <div style="max-width: 1100px; margin: 0 auto">
+        <div class="section-label">HOW IT WORKS</div>
+        <h2 class="section-title">
+          Stop wondering. <span>Start knowing.</span>
+        </h2>
+        <p class="section-sub">
+          Near runs quietly in the background, detecting other users within 0.1
+          miles of you throughout your day.
+        </p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">01</div>
+            <div class="step-title">Enable location</div>
+            <p class="step-desc">
+              Near checks your location once per minute. Your exact location is
+              never shared with anyone — ever.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">02</div>
+            <div class="step-title">Cross paths</div>
+            <p class="step-desc">
+              When another Near user comes within 0.1 miles of you, they're
+              added to your daily nearby list.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">03</div>
+            <div class="step-title">Discover & connect</div>
+            <p class="step-desc">
+              Browse who was near you today. Unlock their socials, send a
+              message, or just satisfy your curiosity.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">04</div>
+            <div class="step-title">Resets at 4am</div>
+            <p class="step-desc">
+              Every day at 4am your list resets. Fresh start. New day. New
+              people to discover.
+            </p>
+          </div>
+        </div>
+
+        <div class="screenshot-intro">IN THE APP</div>
+        <div class="screenshot-grid">
+          <div class="screenshot-item">
+            <img
+              src="ss-welcome.png"
+              alt="Near welcome screen"
+              class="screenshot-img"
+              onclick="openLightbox(this)"
+            />
+            <span class="screenshot-caption">Sign up and get started</span>
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="ss-feed.png"
+              alt="Nearby people feed"
+              class="screenshot-img"
+              onclick="openLightbox(this)"
+            />
+            <span class="screenshot-caption">See everyone near you today</span>
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="ss-profile-view.png"
+              alt="View a user profile"
+              class="screenshot-img"
+              onclick="openLightbox(this)"
+            />
+            <span class="screenshot-caption"
+              >View profiles &amp; tap their socials</span
+            >
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="ss-unlock.png"
+              alt="Unlock a profile"
+              class="screenshot-img"
+              onclick="openLightbox(this)"
+            />
+            <span class="screenshot-caption">Reveal names &amp; send a DM</span>
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="ss-profile-edit.png"
+              alt="Edit your profile"
+              class="screenshot-img"
+              onclick="openLightbox(this)"
+            />
+            <span class="screenshot-caption"
+              >Build your profile &amp; add socials</span
+            >
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="ss-settings.png"
+              alt="Privacy &amp; settings"
+              class="screenshot-img"
+              onclick="openLightbox(this)"
+            />
+            <span class="screenshot-caption"
+              >Go invisible or set active hours</span
+            >
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="ss-refer.png"
+              alt="Refer friends"
+              class="screenshot-img"
+              onclick="openLightbox(this)"
+            />
+            <span class="screenshot-caption"
+              >Invite friends &amp; earn rewards</span
+            >
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="ss-premium.png"
+              alt="Premium plans"
+              class="screenshot-img"
+              onclick="openLightbox(this)"
+            />
+            <span class="screenshot-caption"
+              >Upgrade for exclusive features</span
+            >
+          </div>
+        </div>
       </div>
+    </section>
 
-    </div>
+    <!-- FEATURES -->
+    <section class="features" id="features">
+      <div style="max-width: 1520px; margin: 0 auto">
+        <div class="section-label">FEATURES</div>
+        <h2 class="section-title" style="color: #ffffff">
+          Everything you <span>need</span>
+        </h2>
+        <p class="section-sub">
+          Built for real life encounters, not endless scrolling.
+        </p>
 
-  </section>
+        <div class="orbital-wrap">
+          <div class="orbital-row">
+            <div class="orbital-scale-root" id="orbitalScaleRoot">
+              <!-- ORBITAL CIRCLE -->
+              <div class="orbital-container" id="orbitalContainer">
+                <!-- Orbit rings -->
+                <div class="orbit-ring orbit-ring-outer"></div>
+                <div class="orbit-ring orbit-ring-inner"></div>
 
-  <style>
-  @media (max-width: 768px) {
-    .near-hero-phones { display: none; }
-    .near-hero-left { max-width: 100% !important; }
-  }
-  </style>
+                <!-- Connector lines SVG -->
+                <svg
+                  class="orbit-connector-svg"
+                  viewBox="0 0 805 805"
+                  id="connectorSvg"
+                >
+                  <!-- 9 lines at 40° increments starting from top (0°). Endpoints at radius ≈196 from centre (403,403) so they stop at the hover-scaled node edge. -->
+                  <line id="line-0" x1="403" y1="403" x2="403" y2="207" />
+                  <line id="line-1" x1="403" y1="403" x2="529" y2="253" />
+                  <line id="line-2" x1="403" y1="403" x2="596" y2="369" />
+                  <line id="line-3" x1="403" y1="403" x2="573" y2="501" />
+                  <line id="line-4" x1="403" y1="403" x2="470" y2="587" />
+                  <line id="line-5" x1="403" y1="403" x2="336" y2="587" />
+                  <line id="line-6" x1="403" y1="403" x2="233" y2="501" />
+                  <line id="line-7" x1="403" y1="403" x2="210" y2="369" />
+                  <line id="line-8" x1="403" y1="403" x2="277" y2="253" />
+                </svg>
 
-  <!-- HOW IT WORKS -->
-  <section class="how" id="how">
-    <div style="max-width: 1100px; margin: 0 auto;">
-      <div class="section-label">HOW IT WORKS</div>
-      <h2 class="section-title">Stop wondering. <span>Start knowing.</span></h2>
-      <p class="section-sub">Near runs quietly in the background, detecting other users within 0.1 miles of you throughout your day.</p>
-      <div class="steps">
-        <div class="step">
-          <div class="step-number">01</div>
-          <div class="step-title">Enable location</div>
-          <p class="step-desc">Near checks your location once per minute. Your exact location is never shared with anyone — ever.</p>
-        </div>
-        <div class="step">
-          <div class="step-number">02</div>
-          <div class="step-title">Cross paths</div>
-          <p class="step-desc">When another Near user comes within 0.1 miles of you, they're added to your daily nearby list.</p>
-        </div>
-        <div class="step">
-          <div class="step-number">03</div>
-          <div class="step-title">Discover & connect</div>
-          <p class="step-desc">Browse who was near you today. Unlock their socials, send a message, or just satisfy your curiosity.</p>
-        </div>
-        <div class="step">
-          <div class="step-number">04</div>
-          <div class="step-title">Resets at 4am</div>
-          <p class="step-desc">Every day at 4am your list resets. Fresh start. New day. New people to discover.</p>
-        </div>
-      </div>
+                <!-- Center logo -->
+                <div class="orbit-center">
+                  <svg
+                    width="67"
+                    height="78"
+                    viewBox="0 0 46 54"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <ellipse
+                      cx="23"
+                      cy="21"
+                      rx="13"
+                      ry="13"
+                      fill="rgba(255,255,255,0.15)"
+                      stroke="white"
+                      stroke-width="2.5"
+                    />
+                    <circle cx="23" cy="21" r="5" fill="white" />
+                    <path
+                      d="M23 34 C23 34 10 46 10 46 Q23 56 36 46 Z"
+                      fill="rgba(255,255,255,0.25)"
+                      stroke="white"
+                      stroke-width="1.5"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M23 34 L23 50"
+                      stroke="white"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                    />
+                    <circle cx="23" cy="52" r="2.5" fill="white" />
+                  </svg>
+                </div>
 
-      <div class="screenshot-intro">IN THE APP</div>
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <img src="ss-welcome.png" alt="Near welcome screen" class="screenshot-img" onclick="openLightbox(this)">
-          <span class="screenshot-caption">Sign up and get started</span>
-        </div>
-        <div class="screenshot-item">
-          <img src="ss-feed.png" alt="Nearby people feed" class="screenshot-img" onclick="openLightbox(this)">
-          <span class="screenshot-caption">See everyone near you today</span>
-        </div>
-        <div class="screenshot-item">
-          <img src="ss-profile-view.png" alt="View a user profile" class="screenshot-img" onclick="openLightbox(this)">
-          <span class="screenshot-caption">View profiles &amp; tap their socials</span>
-        </div>
-        <div class="screenshot-item">
-          <img src="ss-unlock.png" alt="Unlock a profile" class="screenshot-img" onclick="openLightbox(this)">
-          <span class="screenshot-caption">Reveal names &amp; send a DM</span>
-        </div>
-        <div class="screenshot-item">
-          <img src="ss-profile-edit.png" alt="Edit your profile" class="screenshot-img" onclick="openLightbox(this)">
-          <span class="screenshot-caption">Build your profile &amp; add socials</span>
-        </div>
-        <div class="screenshot-item">
-          <img src="ss-settings.png" alt="Privacy &amp; settings" class="screenshot-img" onclick="openLightbox(this)">
-          <span class="screenshot-caption">Go invisible or set active hours</span>
-        </div>
-        <div class="screenshot-item">
-          <img src="ss-refer.png" alt="Refer friends" class="screenshot-img" onclick="openLightbox(this)">
-          <span class="screenshot-caption">Invite friends &amp; earn rewards</span>
-        </div>
-        <div class="screenshot-item">
-          <img src="ss-premium.png" alt="Premium plans" class="screenshot-img" onclick="openLightbox(this)">
-          <span class="screenshot-caption">Upgrade for exclusive features</span>
-        </div>
-      </div>
-    </div>
-  </section>
+                <!-- Feature nodes: 9 nodes at 40° increments, radius 277 from centre (402,402). Node is 138px so CSS offset = -69. -->
+                <!-- 0° -->
+                <div
+                  class="feature-node"
+                  style="left: 333px; top: 56px"
+                  data-index="0"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <circle
+                      cx="15"
+                      cy="15"
+                      r="13"
+                      fill="rgba(41,208,245,0.18)"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                    />
+                    <circle
+                      cx="15"
+                      cy="15"
+                      r="8"
+                      fill="rgba(41,208,245,0.28)"
+                      stroke="#29d0f5"
+                      stroke-width="1"
+                    />
+                    <circle cx="15" cy="15" r="3" fill="#29d0f5" />
+                  </svg>
+                  <span class="fn-label">Proximity<br />detection</span>
+                </div>
 
-  <!-- FEATURES -->
-  <section class="features" id="features">
-    <div style="max-width:1520px; margin:0 auto;">
-      <div class="section-label">FEATURES</div>
-      <h2 class="section-title" style="color:#ffffff;">Everything you <span>need</span></h2>
-      <p class="section-sub">Built for real life encounters, not endless scrolling.</p>
+                <!-- 40° -->
+                <div
+                  class="feature-node"
+                  style="left: 511px; top: 121px"
+                  data-index="1"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <rect
+                      x="6"
+                      y="13"
+                      width="18"
+                      height="14"
+                      rx="3"
+                      fill="rgba(41,208,245,0.18)"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                    />
+                    <path
+                      d="M10 13 V10 a5 5 0 0 1 10 0 V13"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                    <rect
+                      x="13"
+                      y="18"
+                      width="4"
+                      height="4"
+                      rx="2"
+                      fill="#29d0f5"
+                    />
+                  </svg>
+                  <span class="fn-label">Privacy<br />first</span>
+                </div>
 
-      <div class="orbital-wrap">
-        <div class="orbital-row">
-        <div class="orbital-scale-root" id="orbitalScaleRoot">
+                <!-- 80° — NEW: Private Zones (geo-lock, up to 2 saved areas) -->
+                <div
+                  class="feature-node"
+                  style="left: 606px; top: 285px"
+                  data-index="2"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <circle
+                      cx="15"
+                      cy="15"
+                      r="11"
+                      fill="rgba(41,208,245,0.15)"
+                      stroke="#29d0f5"
+                      stroke-width="1.3"
+                      stroke-dasharray="3 2"
+                    />
+                    <path
+                      d="M15 9 C12.8 9 11 10.8 11 13 C11 16 15 20 15 20 C15 20 19 16 19 13 C19 10.8 17.2 9 15 9 Z"
+                      fill="#29d0f5"
+                    />
+                    <circle cx="15" cy="13" r="1.5" fill="#ffffff" />
+                  </svg>
+                  <span class="fn-label">Private<br />Zones</span>
+                </div>
 
-          <!-- ORBITAL CIRCLE -->
-          <div class="orbital-container" id="orbitalContainer">
+                <!-- 120° -->
+                <div
+                  class="feature-node"
+                  style="left: 573px; top: 471px"
+                  data-index="3"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <ellipse
+                      cx="15"
+                      cy="15"
+                      rx="12"
+                      ry="8"
+                      fill="rgba(41,208,245,0.18)"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                    />
+                    <circle cx="15" cy="15" r="3.5" fill="#29d0f5" />
+                    <line
+                      x1="5"
+                      y1="5"
+                      x2="25"
+                      y2="25"
+                      stroke="#29d0f5"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span class="fn-label">Go<br />invisible</span>
+                </div>
 
-            <!-- Orbit rings -->
-            <div class="orbit-ring orbit-ring-outer"></div>
-            <div class="orbit-ring orbit-ring-inner"></div>
+                <!-- 160° -->
+                <div
+                  class="feature-node"
+                  style="left: 428px; top: 593px"
+                  data-index="4"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <path
+                      d="M4 6 Q4 4 6 4 H20 Q22 4 22 6 V18 Q22 20 20 20 H12 L6 26 V20 H6 Q4 20 4 18 Z"
+                      fill="rgba(41,208,245,0.18)"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                    />
+                    <line
+                      x1="9"
+                      y1="10"
+                      x2="17"
+                      y2="10"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                    <line
+                      x1="9"
+                      y1="14"
+                      x2="15"
+                      y2="14"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span class="fn-label">Cold<br />DMs</span>
+                </div>
 
-            <!-- Connector lines SVG -->
-            <svg class="orbit-connector-svg" viewBox="0 0 805 805" id="connectorSvg">
-              <!-- lines stop at hover-scaled circle edge (82px from node center = 69px radius * 1.18 scale) -->
-              <line id="line-0" x1="403" y1="403" x2="402" y2="207"/>
-              <line id="line-1" x1="403" y1="403" x2="540" y2="264"/>
-              <line id="line-2" x1="403" y1="403" x2="597" y2="402"/>
-              <line id="line-3" x1="403" y1="403" x2="540" y2="540"/>
-              <line id="line-4" x1="403" y1="403" x2="402" y2="597"/>
-              <line id="line-5" x1="403" y1="403" x2="264" y2="540"/>
-              <line id="line-6" x1="403" y1="403" x2="207" y2="402"/>
-              <line id="line-7" x1="403" y1="403" x2="264" y2="264"/>
-            </svg>
+                <!-- 200° -->
+                <div
+                  class="feature-node"
+                  style="left: 238px; top: 593px"
+                  data-index="5"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <polygon
+                      points="15,3 18.5,11 27,11.5 21,17 23,26 15,21 7,26 9,17 3,11.5 11.5,11"
+                      fill="rgba(41,208,245,0.18)"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="fn-label">Profile<br />boost</span>
+                </div>
 
-            <!-- Center logo -->
-            <div class="orbit-center">
-              <svg width="67" height="78" viewBox="0 0 46 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="23" cy="21" rx="13" ry="13" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="2.5"/>
-                <circle cx="23" cy="21" r="5" fill="white"/>
-                <path d="M23 34 C23 34 10 46 10 46 Q23 56 36 46 Z" fill="rgba(255,255,255,0.25)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
-                <path d="M23 34 L23 50" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                <circle cx="23" cy="52" r="2.5" fill="white"/>
-              </svg>
+                <!-- 240° -->
+                <div
+                  class="feature-node"
+                  style="left: 93px; top: 471px"
+                  data-index="6"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <circle
+                      cx="15"
+                      cy="15"
+                      r="12"
+                      fill="rgba(41,208,245,0.18)"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                    />
+                    <circle cx="11" cy="12" r="2" fill="#29d0f5" />
+                    <circle cx="19" cy="12" r="2" fill="#29d0f5" />
+                    <path
+                      d="M9 19 Q15 24 21 19"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span class="fn-label">Zodiac<br />signs</span>
+                </div>
+
+                <!-- 280° -->
+                <div
+                  class="feature-node"
+                  style="left: 60px; top: 285px"
+                  data-index="7"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <path
+                      d="M15 3 C8 3 4 8 4 14 C4 20 8 24 15 27 C22 24 26 20 26 14 C26 8 22 3 15 3 Z"
+                      fill="rgba(41,208,245,0.18)"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                    />
+                    <path
+                      d="M10 15 L13.5 18.5 L20 12"
+                      stroke="#29d0f5"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      fill="none"
+                    />
+                  </svg>
+                  <span class="fn-label">Safety<br />built in</span>
+                </div>
+
+                <!-- 320° -->
+                <div
+                  class="feature-node"
+                  style="left: 155px; top: 121px"
+                  data-index="8"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <path
+                      d="M15 3 L20 10 H27 L22 16 L24 24 L15 19 L6 24 L8 16 L3 10 H10 Z"
+                      fill="rgba(41,208,245,0.18)"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                      stroke-linejoin="round"
+                    />
+                    <circle cx="15" cy="14" r="3" fill="#29d0f5" />
+                  </svg>
+                  <span class="fn-label">Refer<br />&amp; earn</span>
+                </div>
+              </div>
+              <!-- /orbital-container -->
             </div>
+            <!-- /orbital-scale-root -->
 
-            <!-- Feature nodes: positioned at radius 277px from center (402,402), node is 138px so offset by -69 -->
-            <!-- 0° top -->
-            <div class="feature-node" style="left:333px;top:56px;" data-index="0">
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                <circle cx="15" cy="15" r="13" fill="rgba(41,208,245,0.18)" stroke="#29d0f5" stroke-width="1.5"/>
-                <circle cx="15" cy="15" r="8" fill="rgba(41,208,245,0.28)" stroke="#29d0f5" stroke-width="1"/>
-                <circle cx="15" cy="15" r="3" fill="#29d0f5"/>
-              </svg>
-              <span class="fn-label">Proximity<br>detection</span>
-            </div>
-
-            <!-- 45° top-right -->
-            <div class="feature-node" style="left:529px;top:137px;" data-index="1">
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                <rect x="6" y="13" width="18" height="14" rx="3" fill="rgba(41,208,245,0.18)" stroke="#29d0f5" stroke-width="1.5"/>
-                <path d="M10 13 V10 a5 5 0 0 1 10 0 V13" stroke="#29d0f5" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <rect x="13" y="18" width="4" height="4" rx="2" fill="#29d0f5"/>
-              </svg>
-              <span class="fn-label">Privacy<br>first</span>
-            </div>
-
-            <!-- 90° right -->
-            <div class="feature-node" style="left:610px;top:333px;" data-index="2">
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                <ellipse cx="15" cy="15" rx="12" ry="8" fill="rgba(41,208,245,0.18)" stroke="#29d0f5" stroke-width="1.5"/>
-                <circle cx="15" cy="15" r="3.5" fill="#29d0f5"/>
-                <line x1="5" y1="5" x2="25" y2="25" stroke="#29d0f5" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-              <span class="fn-label">Go<br>invisible</span>
-            </div>
-
-            <!-- 135° bottom-right -->
-            <div class="feature-node" style="left:529px;top:529px;" data-index="3">
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                <path d="M4 6 Q4 4 6 4 H20 Q22 4 22 6 V18 Q22 20 20 20 H12 L6 26 V20 H6 Q4 20 4 18 Z" fill="rgba(41,208,245,0.18)" stroke="#29d0f5" stroke-width="1.5"/>
-                <line x1="9" y1="10" x2="17" y2="10" stroke="#29d0f5" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="9" y1="14" x2="15" y2="14" stroke="#29d0f5" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              <span class="fn-label">Cold<br>DMs</span>
-            </div>
-
-            <!-- 180° bottom -->
-            <div class="feature-node" style="left:333px;top:610px;" data-index="4">
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                <polygon points="15,3 18.5,11 27,11.5 21,17 23,26 15,21 7,26 9,17 3,11.5 11.5,11" fill="rgba(41,208,245,0.18)" stroke="#29d0f5" stroke-width="1.5" stroke-linejoin="round"/>
-              </svg>
-              <span class="fn-label">Profile<br>boost</span>
-            </div>
-
-            <!-- 225° bottom-left -->
-            <div class="feature-node" style="left:137px;top:529px;" data-index="5">
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                <circle cx="15" cy="15" r="12" fill="rgba(41,208,245,0.18)" stroke="#29d0f5" stroke-width="1.5"/>
-                <circle cx="11" cy="12" r="2" fill="#29d0f5"/>
-                <circle cx="19" cy="12" r="2" fill="#29d0f5"/>
-                <path d="M9 19 Q15 24 21 19" stroke="#29d0f5" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-              </svg>
-              <span class="fn-label">Zodiac<br>signs</span>
-            </div>
-
-            <!-- 270° left -->
-            <div class="feature-node" style="left:56px;top:333px;" data-index="6">
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                <path d="M15 3 C8 3 4 8 4 14 C4 20 8 24 15 27 C22 24 26 20 26 14 C26 8 22 3 15 3 Z" fill="rgba(41,208,245,0.18)" stroke="#29d0f5" stroke-width="1.5"/>
-                <path d="M10 15 L13.5 18.5 L20 12" stroke="#29d0f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              </svg>
-              <span class="fn-label">Safety<br>built in</span>
-            </div>
-
-            <!-- 315° top-left -->
-            <div class="feature-node" style="left:137px;top:137px;" data-index="7">
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                <path d="M15 3 L20 10 H27 L22 16 L24 24 L15 19 L6 24 L8 16 L3 10 H10 Z" fill="rgba(41,208,245,0.18)" stroke="#29d0f5" stroke-width="1.5" stroke-linejoin="round"/>
-                <circle cx="15" cy="14" r="3" fill="#29d0f5"/>
-              </svg>
-              <span class="fn-label">Refer<br>&amp; earn</span>
-            </div>
-
-          </div><!-- /orbital-container -->
-
-        </div><!-- /orbital-scale-root -->
-
-          <!-- Info panel -->
-          <div class="orbital-panel" id="orbitalPanel">
-            <div class="orbital-panel-inner">
-              <div id="panelIcon"></div>
-              <div>
-                <div class="panel-title" id="panelTitle"></div>
-                <div class="panel-desc" id="panelDesc"></div>
+            <!-- Info panel -->
+            <div class="orbital-panel" id="orbitalPanel">
+              <div class="orbital-panel-inner">
+                <div id="panelIcon"></div>
+                <div>
+                  <div class="panel-title" id="panelTitle"></div>
+                  <div class="panel-desc" id="panelDesc"></div>
+                </div>
               </div>
             </div>
           </div>
+          <!-- /orbital-row -->
 
-        </div><!-- /orbital-row -->
+          <div class="orbital-hint">
+            Hover to highlight &middot; click for details
+          </div>
+        </div>
+        <!-- /orbital-wrap -->
+      </div>
+    </section>
 
-        <div class="orbital-hint">Hover to highlight &middot; click for details</div>
-      </div><!-- /orbital-wrap -->
+    <script>
+      (function () {
+        var data = [
+          {
+            title: "Proximity detection",
+            desc: "Near uses GPS to detect when another user comes within 0.1 miles of you — roughly a two-minute walk. The app pings your location just once per minute, so it sips battery instead of draining it, and keeps working in the background even when the app is closed. Every encounter is time-stamped so you can see exactly when you crossed paths, whether it was the morning coffee run or a late-night walk home.",
+          },
+          {
+            title: "Privacy first",
+            desc: "Your exact coordinates are never shown to other users, sold to advertisers, or stored long-term. All location history auto-deletes every 24 hours on a rolling basis. You can toggle Invisible Mode with a single tap to disappear from every nearby feed instantly, or schedule Custom Hours so Near only tracks you during the windows you choose — commute only, weekends only, or never during work. Full control, always in your hands.",
+          },
+          {
+            title: "Private Zones",
+            desc: "Save up to 2 geographic areas — like home and work — where you become completely undiscoverable. Drop a pin on a real map, choose a radius from 100 to 1,000 feet, and Near stops uploading your location the instant you step inside. Your existing location row is immediately wiped from our servers so nobody can see you — not even a stale ping from earlier in the day. The moment you leave the zone, normal discovery resumes automatically on the very next GPS tick.",
+          },
+          {
+            title: "Go invisible",
+            desc: "One tap and you vanish from every nearby feed in real time — but you can still see who is near you. Perfect for focused workdays, private errands, or a mental-health break from social discovery. Your existing matches, conversations, and referral progress stay completely intact the whole time. Flip it back on whenever you are ready to be seen again.",
+          },
+          {
+            title: "Cold DMs",
+            desc: "Send one cold DM per day to a stranger who caught your attention when you crossed paths. If they reply, the conversation opens up with unlimited messaging. If they do not, the message stays delivered but you cannot follow up — which keeps the experience respectful and spam-free. Premium members get extra daily cold DMs, and every cold DM shows location proof so recipients know the encounter was real.",
+          },
+          {
+            title: "Profile boost",
+            desc: "For $3.99, pin yourself at the very top of every nearby feed in your area for 24 straight hours. Your profile gets a glowing border and a Featured badge so you instantly stand out at events, conferences, festivals, or anywhere you want to be noticed. A stats panel shows exactly how many views, social unlocks, and DMs your boost earned, and you can stack or schedule boosts from inside the app.",
+          },
+          {
+            title: "Zodiac signs",
+            desc: "Display your zodiac sign on your profile with a clean, stylized icon — always visible, no subscription or ad required. Filter your nearby feed to show only compatible signs if you want to lean into the astrology side of discovery. Supports Western sun signs out of the box, and can be hidden anytime from profile settings if you prefer to keep it off.",
+          },
+          {
+            title: "Safety built in",
+            desc: "Every single message runs through automatic spam, harassment, and hate-speech filters before it ever reaches you. One-tap block instantly removes a user from your feeds, DMs, and history. Reports are reviewed by real humans within 24 hours, and a strict three-strike system permanently bans bad actors, with device-level enforcement to keep them from sneaking back. Age verification filters out anyone under the minimum age automatically.",
+          },
+          {
+            title: "Refer & earn",
+            desc: "Share your personal referral code and earn rewards every time a friend signs up — a free profile boost plus 7 days of premium time per referral. Hit 10 referrals for a full month of premium free, or keep going all the way to 50 referrals for up to 6 months free. Track your progress in the Refer tab with a live counter showing how many friends have joined and what reward is next.",
+          },
+        ];
 
-    </div>
-  </section>
+        var activeIndex = -1;
+        var nodes = document.querySelectorAll(".feature-node");
+        var lines = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (i) {
+          return document.getElementById("line-" + i);
+        });
+        var panel = document.getElementById("orbitalPanel");
+        var panelTitle = document.getElementById("panelTitle");
+        var panelDesc = document.getElementById("panelDesc");
+        var panelIcon = document.getElementById("panelIcon");
 
-  <script>
-  (function() {
-    var data = [
-      { title: 'Proximity detection', desc: 'Near uses GPS to detect when another user comes within 0.1 miles of you — roughly a two-minute walk. The app pings your location just once per minute, so it sips battery instead of draining it, and keeps working in the background even when the app is closed. Every encounter is time-stamped so you can see exactly when you crossed paths, whether it was the morning coffee run or a late-night walk home.' },
-      { title: 'Privacy first',       desc: 'Your exact coordinates are never shown to other users, sold to advertisers, or stored long-term. All location history auto-deletes every 24 hours on a rolling basis. You can toggle Invisible Mode with a single tap to disappear from every nearby feed instantly, or schedule Custom Hours so Near only tracks you during the windows you choose — commute only, weekends only, or never during work. Full control, always in your hands.' },
-      { title: 'Go invisible',        desc: 'One tap and you vanish from every nearby feed in real time — but you can still see who is near you. Perfect for focused workdays, private errands, or a mental-health break from social discovery. Your existing matches, conversations, and referral progress stay completely intact the whole time. Flip it back on whenever you are ready to be seen again.' },
-      { title: 'Cold DMs',            desc: 'Send one cold DM per day to a stranger who caught your attention when you crossed paths. If they reply, the conversation opens up with unlimited messaging. If they do not, the message stays delivered but you cannot follow up — which keeps the experience respectful and spam-free. Premium members get extra daily cold DMs, and every cold DM shows location proof so recipients know the encounter was real.' },
-      { title: 'Profile boost',       desc: 'For $3.99, pin yourself at the very top of every nearby feed in your area for 24 straight hours. Your profile gets a glowing border and a Featured badge so you instantly stand out at events, conferences, festivals, or anywhere you want to be noticed. A stats panel shows exactly how many views, social unlocks, and DMs your boost earned, and you can stack or schedule boosts from inside the app.' },
-      { title: 'Zodiac signs',        desc: 'Display your zodiac sign on your profile with a clean, stylized icon — always visible, no subscription or ad required. Filter your nearby feed to show only compatible signs if you want to lean into the astrology side of discovery. Supports Western sun signs out of the box, and can be hidden anytime from profile settings if you prefer to keep it off.' },
-      { title: 'Safety built in',     desc: 'Every single message runs through automatic spam, harassment, and hate-speech filters before it ever reaches you. One-tap block instantly removes a user from your feeds, DMs, and history. Reports are reviewed by real humans within 24 hours, and a strict three-strike system permanently bans bad actors, with device-level enforcement to keep them from sneaking back. Age verification filters out anyone under the minimum age automatically.' },
-      { title: 'Refer & earn',        desc: 'Share your personal referral code and earn rewards every time a friend signs up — a free profile boost plus 7 days of premium time per referral. Hit 10 referrals for a full month of premium free, or keep going all the way to 50 referrals for up to 6 months free. Track your progress in the Refer tab with a live counter showing how many friends have joined and what reward is next.' }
-    ];
+        nodes.forEach(function (node, i) {
+          node.addEventListener("mouseenter", function () {
+            lines[i].classList.add("active");
+          });
+          node.addEventListener("mouseleave", function () {
+            if (activeIndex !== i) lines[i].classList.remove("active");
+          });
+          node.addEventListener("click", function () {
+            if (activeIndex === i) {
+              // collapse
+              activeIndex = -1;
+              node.classList.remove("active");
+              lines[i].classList.remove("active");
+              panel.classList.remove("open");
+            } else {
+              // switch
+              if (activeIndex !== -1) {
+                nodes[activeIndex].classList.remove("active");
+                lines[activeIndex].classList.remove("active");
+              }
+              activeIndex = i;
+              node.classList.add("active");
+              lines[i].classList.add("active");
+              panelTitle.textContent = data[i].title;
+              panelDesc.textContent = data[i].desc;
+              panelIcon.innerHTML = node
+                .querySelector("svg")
+                .outerHTML.replace(
+                  'width="30" height="30"',
+                  'width="32" height="32"',
+                );
+              panel.classList.add("open");
+            }
+          });
+        });
 
-    var activeIndex = -1;
-    var nodes = document.querySelectorAll('.feature-node');
-    var lines = [0,1,2,3,4,5,6,7].map(function(i){ return document.getElementById('line-'+i); });
-    var panel = document.getElementById('orbitalPanel');
-    var panelTitle = document.getElementById('panelTitle');
-    var panelDesc  = document.getElementById('panelDesc');
-    var panelIcon  = document.getElementById('panelIcon');
-
-    nodes.forEach(function(node, i) {
-      node.addEventListener('mouseenter', function() {
-        lines[i].classList.add('active');
-      });
-      node.addEventListener('mouseleave', function() {
-        if (activeIndex !== i) lines[i].classList.remove('active');
-      });
-      node.addEventListener('click', function() {
-        if (activeIndex === i) {
-          // collapse
-          activeIndex = -1;
-          node.classList.remove('active');
-          lines[i].classList.remove('active');
-          panel.classList.remove('open');
-        } else {
-          // switch
-          if (activeIndex !== -1) {
-            nodes[activeIndex].classList.remove('active');
-            lines[activeIndex].classList.remove('active');
+        // Responsive scale
+        function scaleOrbital() {
+          var root = document.getElementById("orbitalScaleRoot");
+          var wrap = document.getElementById("orbitalContainer");
+          if (!root || !wrap) return;
+          var available = Math.min(window.innerWidth - 48, 805);
+          if (available < 805) {
+            var s = Math.min((available / 805) * 1.25, 1);
+            root.style.transform = "scale(" + s + ")";
+            root.style.transformOrigin = "top center";
+            root.style.marginBottom = 805 * s - 805 + "px";
+          } else {
+            root.style.transform = "";
+            root.style.marginBottom = "";
           }
-          activeIndex = i;
-          node.classList.add('active');
-          lines[i].classList.add('active');
-          panelTitle.textContent = data[i].title;
-          panelDesc.textContent  = data[i].desc;
-          panelIcon.innerHTML    = node.querySelector('svg').outerHTML.replace('width="30" height="30"','width="32" height="32"');
-          panel.classList.add('open');
         }
-      });
-    });
+        scaleOrbital();
+        window.addEventListener("resize", scaleOrbital);
+      })();
+    </script>
 
-    // Responsive scale
-    function scaleOrbital() {
-      var root = document.getElementById('orbitalScaleRoot');
-      var wrap = document.getElementById('orbitalContainer');
-      if (!root || !wrap) return;
-      var available = Math.min(window.innerWidth - 48, 805);
-      if (available < 805) {
-        var s = Math.min((available / 805) * 1.25, 1);
-        root.style.transform = 'scale(' + s + ')';
-        root.style.transformOrigin = 'top center';
-        root.style.marginBottom = ((805 * s - 805) + 'px');
-      } else {
-        root.style.transform = '';
-        root.style.marginBottom = '';
+    <!-- PRIVACY -->
+    <section style="padding: 120px 60px; background: #f8fafc">
+      <div class="privacy-section" style="padding: 0">
+        <div class="privacy-content">
+          <div class="section-label">PRIVACY & SAFETY</div>
+          <h2 class="section-title">Your data,<br /><span>your rules</span></h2>
+          <p class="section-sub" style="margin-bottom: 0">
+            Near was built with privacy at its core. We collect only what we
+            need and delete it on a strict schedule.
+          </p>
+        </div>
+        <div class="privacy-badges">
+          <div class="privacy-badge">
+            <div class="badge-icon">🗑️</div>
+            <div class="badge-title">24hr location wipe</div>
+            <p class="badge-desc">
+              All location data deleted automatically every day
+            </p>
+          </div>
+          <div class="privacy-badge">
+            <div class="badge-icon">💬</div>
+            <div class="badge-title">72hr message log</div>
+            <p class="badge-desc">
+              Messages retained for support only, then deleted
+            </p>
+          </div>
+          <div class="privacy-badge">
+            <div class="badge-icon">🚫</div>
+            <div class="badge-title">No location sharing</div>
+            <p class="badge-desc">
+              Your exact location is never visible to other users
+            </p>
+          </div>
+          <div class="privacy-badge">
+            <div class="badge-icon">📱</div>
+            <div class="badge-title">Phone verified</div>
+            <p class="badge-desc">
+              Every account verified by phone number — no fakes
+            </p>
+          </div>
+          <div class="privacy-badge">
+            <div class="badge-icon">👁️</div>
+            <div class="badge-title">Go invisible</div>
+            <p class="badge-desc">
+              Disappear from nearby feeds instantly — you can still see others
+            </p>
+          </div>
+          <div class="privacy-badge">
+            <div class="badge-icon">🕐</div>
+            <div class="badge-title">Custom hours</div>
+            <p class="badge-desc">
+              Set the hours you're discoverable — location only runs in your
+              window
+            </p>
+          </div>
+          <div class="privacy-badge" style="grid-column: 1 / -1">
+            <div class="badge-icon">📍</div>
+            <div class="badge-title">Private Zones (Geo-Lock)</div>
+            <p class="badge-desc">
+              Save up to 2 places — like home or work — where you vanish
+              completely. Drop a pin on a map, pick a radius, and Near stops
+              uploading your location the moment you step inside. Step out and
+              you reappear automatically.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+      <div class="section-label" style="text-align: center">PRICING</div>
+      <h2 class="section-title" style="text-align: center; margin-bottom: 8px">
+        Simple, <span>transparent</span> pricing
+      </h2>
+      <p
+        style="
+          font-family: &quot;DM Sans&quot;;
+          font-size: 17px;
+          color: #666;
+          margin-bottom: 60px;
+        "
+      >
+        Start free. Upgrade when you're ready.
+      </p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="plan-name" style="color: #111">Free</div>
+          <div class="plan-price">$0</div>
+          <div class="plan-period">forever</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> See who's nearby today</li>
+            <li><span class="check">✓</span> Unlock socials via ads</li>
+            <li><span class="check">✓</span> 1 cold DM per day</li>
+            <li><span class="check">✓</span> Go invisible anytime</li>
+            <li><span class="check">✓</span> Zodiac sign display</li>
+          </ul>
+          <a href="#download" class="plan-btn plan-btn-outline"
+            >Get started free</a
+          >
+        </div>
+        <div class="pricing-card featured">
+          <div class="featured-badge">MOST POPULAR</div>
+          <div class="plan-name">Premium</div>
+          <div class="plan-price" style="color: #378add">$9.99</div>
+          <div class="plan-period" style="color: #666">per month</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Everything in Free</li>
+            <li><span class="check">✓</span> No ads to unlock profiles</li>
+            <li><span class="check">✓</span> 15 cold DMs per day</li>
+            <li><span class="check">✓</span> 3 day history</li>
+            <li><span class="check">✓</span> Priority support</li>
+          </ul>
+          <a href="#download" class="plan-btn plan-btn-primary"
+            >Upgrade to Premium</a
+          >
+        </div>
+        <div class="pricing-card">
+          <div class="plan-name" style="color: #111">Premium+</div>
+          <div class="plan-price">$14.99</div>
+          <div class="plan-period">per month</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Everything in Premium</li>
+            <li><span class="check">✓</span> See who viewed your profile</li>
+            <li><span class="check">✓</span> Read receipts on DMs</li>
+            <li><span class="check">✓</span> View count analytics</li>
+          </ul>
+          <a href="#download" class="plan-btn plan-btn-outline">Get Premium+</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section class="download" id="download">
+      <img
+        src="Graphiclogo.png"
+        alt="Near"
+        style="
+          height: 110px;
+          object-fit: contain;
+          display: block;
+          margin: 0 auto 24px;
+        "
+      />
+      <div class="section-label">GET THE APP</div>
+      <h2 class="section-title">Start discovering <span>today</span></h2>
+      <p class="section-sub">Available on iOS and Android. Free to download.</p>
+      <div class="download-buttons">
+        <a href="#" class="store-btn">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <path
+              d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"
+            />
+          </svg>
+          <div class="store-label">
+            <span class="store-sub">Download on the</span>
+            <span class="store-name">App Store</span>
+          </div>
+        </a>
+        <a href="#" class="store-btn">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <path
+              d="M3.18 23.76c.3.17.65.19.97.06l12.45-6.97-2.64-2.64-10.78 9.55zM.58 1.28C.22 1.62 0 2.16 0 2.86v18.28c0 .7.22 1.24.58 1.58l.08.08L10.06 13l-.08-.08V1.28L.58 1.28zM20.46 10.26l-2.56-1.44-3.01 3.01 3.01 3.01 2.57-1.44c.73-.41.73-1.73-.01-2.14zM4.15.24L16.6 7.21 13.96 9.85 3.18.3C3.5.17 3.85.19 4.15.36z"
+            />
+          </svg>
+          <div class="store-label">
+            <span class="store-sub">Get it on</span>
+            <span class="store-name">Google Play</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-logo">
+        <img
+          src="nearblue1.png"
+          alt="Near"
+          style="height: 99px; object-fit: contain"
+        />
+      </div>
+      <div class="footer-links">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="support.html">Support</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-copy">© 2026 Near. All rights reserved.</div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div id="lb-overlay" onclick="closeLightbox()">
+      <button id="lb-close" onclick="closeLightbox()" aria-label="Close">
+        &#x2715;
+      </button>
+      <img id="lb-img" src="" alt="" onclick="event.stopPropagation()" />
+    </div>
+
+    <script>
+      function openLightbox(img) {
+        document.getElementById("lb-img").src = img.src;
+        document.getElementById("lb-img").alt = img.alt;
+        document.getElementById("lb-overlay").classList.add("open");
+        document.body.style.overflow = "hidden";
       }
-    }
-    scaleOrbital();
-    window.addEventListener('resize', scaleOrbital);
-  })();
-  </script>
-
-  <!-- PRIVACY -->
-  <section style="padding: 120px 60px; background: #f8fafc;">
-    <div class="privacy-section" style="padding: 0;">
-      <div class="privacy-content">
-        <div class="section-label">PRIVACY & SAFETY</div>
-        <h2 class="section-title">Your data,<br><span>your rules</span></h2>
-        <p class="section-sub" style="margin-bottom: 0;">Near was built with privacy at its core. We collect only what we need and delete it on a strict schedule.</p>
-      </div>
-      <div class="privacy-badges">
-        <div class="privacy-badge">
-          <div class="badge-icon">🗑️</div>
-          <div class="badge-title">24hr location wipe</div>
-          <p class="badge-desc">All location data deleted automatically every day</p>
-        </div>
-        <div class="privacy-badge">
-          <div class="badge-icon">💬</div>
-          <div class="badge-title">72hr message log</div>
-          <p class="badge-desc">Messages retained for support only, then deleted</p>
-        </div>
-        <div class="privacy-badge">
-          <div class="badge-icon">🚫</div>
-          <div class="badge-title">No location sharing</div>
-          <p class="badge-desc">Your exact location is never visible to other users</p>
-        </div>
-        <div class="privacy-badge">
-          <div class="badge-icon">📱</div>
-          <div class="badge-title">Phone verified</div>
-          <p class="badge-desc">Every account verified by phone number — no fakes</p>
-        </div>
-        <div class="privacy-badge">
-          <div class="badge-icon">👁️</div>
-          <div class="badge-title">Go invisible</div>
-          <p class="badge-desc">Disappear from nearby feeds instantly — you can still see others</p>
-        </div>
-        <div class="privacy-badge">
-          <div class="badge-icon">🕐</div>
-          <div class="badge-title">Custom hours</div>
-          <p class="badge-desc">Set the hours you're discoverable — location only runs in your window</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRICING -->
-  <section class="pricing" id="pricing">
-    <div class="section-label" style="text-align:center;">PRICING</div>
-    <h2 class="section-title" style="text-align:center; margin-bottom: 8px;">Simple, <span>transparent</span> pricing</h2>
-    <p style="font-family: 'DM Sans'; font-size: 17px; color: #666; margin-bottom: 60px;">Start free. Upgrade when you're ready.</p>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="plan-name" style="color:#111;">Free</div>
-        <div class="plan-price">$0</div>
-        <div class="plan-period">forever</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> See who's nearby today</li>
-          <li><span class="check">✓</span> Unlock socials via ads</li>
-          <li><span class="check">✓</span> 1 cold DM per day</li>
-          <li><span class="check">✓</span> Go invisible anytime</li>
-          <li><span class="check">✓</span> Zodiac sign display</li>
-        </ul>
-        <a href="#download" class="plan-btn plan-btn-outline">Get started free</a>
-      </div>
-      <div class="pricing-card featured">
-        <div class="featured-badge">MOST POPULAR</div>
-        <div class="plan-name">Premium</div>
-        <div class="plan-price" style="color:#378ADD;">$9.99</div>
-        <div class="plan-period" style="color:#666;">per month</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Everything in Free</li>
-          <li><span class="check">✓</span> No ads to unlock profiles</li>
-          <li><span class="check">✓</span> 15 cold DMs per day</li>
-          <li><span class="check">✓</span> 3 day history</li>
-          <li><span class="check">✓</span> Priority support</li>
-        </ul>
-        <a href="#download" class="plan-btn plan-btn-primary">Upgrade to Premium</a>
-      </div>
-      <div class="pricing-card">
-        <div class="plan-name" style="color:#111;">Premium+</div>
-        <div class="plan-price">$14.99</div>
-        <div class="plan-period">per month</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Everything in Premium</li>
-          <li><span class="check">✓</span> See who viewed your profile</li>
-          <li><span class="check">✓</span> Read receipts on DMs</li>
-          <li><span class="check">✓</span> View count analytics</li>
-        </ul>
-        <a href="#download" class="plan-btn plan-btn-outline">Get Premium+</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- DOWNLOAD -->
-  <section class="download" id="download">
-    <img src="Graphiclogo.png" alt="Near" style="height:110px;object-fit:contain;display:block;margin:0 auto 24px;">
-    <div class="section-label">GET THE APP</div>
-    <h2 class="section-title">Start discovering <span>today</span></h2>
-    <p class="section-sub">Available on iOS and Android. Free to download.</p>
-    <div class="download-buttons">
-      <a href="#" class="store-btn">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        <div class="store-label">
-          <span class="store-sub">Download on the</span>
-          <span class="store-name">App Store</span>
-        </div>
-      </a>
-      <a href="#" class="store-btn">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.65.19.97.06l12.45-6.97-2.64-2.64-10.78 9.55zM.58 1.28C.22 1.62 0 2.16 0 2.86v18.28c0 .7.22 1.24.58 1.58l.08.08L10.06 13l-.08-.08V1.28L.58 1.28zM20.46 10.26l-2.56-1.44-3.01 3.01 3.01 3.01 2.57-1.44c.73-.41.73-1.73-.01-2.14zM4.15.24L16.6 7.21 13.96 9.85 3.18.3C3.5.17 3.85.19 4.15.36z"/></svg>
-        <div class="store-label">
-          <span class="store-sub">Get it on</span>
-          <span class="store-name">Google Play</span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">
-      <img src="nearblue1.png" alt="Near" style="height: 99px; object-fit: contain;">
-    </div>
-    <div class="footer-links">
-      <a href="#how">How it works</a>
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="terms.html">Terms of Service</a>
-      <a href="support.html">Support</a>
-      <a href="contact.html">Contact</a>
-    </div>
-    <div class="footer-copy">© 2026 Near. All rights reserved.</div>
-  </footer>
-
-  <!-- Lightbox -->
-  <div id="lb-overlay" onclick="closeLightbox()">
-    <button id="lb-close" onclick="closeLightbox()" aria-label="Close">&#x2715;</button>
-    <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
-  </div>
-
-  <script>
-    function openLightbox(img) {
-      document.getElementById('lb-img').src = img.src;
-      document.getElementById('lb-img').alt = img.alt;
-      document.getElementById('lb-overlay').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeLightbox() {
-      document.getElementById('lb-overlay').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeLightbox();
-    });
-  </script>
-
-</body>
+      function closeLightbox() {
+        document.getElementById("lb-overlay").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeLightbox();
+      });
+    </script>
+  </body>
 </html>
