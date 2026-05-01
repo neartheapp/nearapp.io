@@ -1445,16 +1445,17 @@
                   viewBox="0 0 805 805"
                   id="connectorSvg"
                 >
-                  <!-- 9 lines at 40° increments starting from top (0°). Endpoints at radius ≈196 from centre (403,403) so they stop at the hover-scaled node edge. -->
+                  <!-- 10 lines at 36° increments starting from top (0°). Endpoints at radius ≈196 from centre (403,403) so they stop at the hover-scaled node edge. -->
                   <line id="line-0" x1="403" y1="403" x2="403" y2="207" />
-                  <line id="line-1" x1="403" y1="403" x2="529" y2="253" />
-                  <line id="line-2" x1="403" y1="403" x2="596" y2="369" />
-                  <line id="line-3" x1="403" y1="403" x2="573" y2="501" />
-                  <line id="line-4" x1="403" y1="403" x2="470" y2="587" />
-                  <line id="line-5" x1="403" y1="403" x2="336" y2="587" />
-                  <line id="line-6" x1="403" y1="403" x2="233" y2="501" />
-                  <line id="line-7" x1="403" y1="403" x2="210" y2="369" />
-                  <line id="line-8" x1="403" y1="403" x2="277" y2="253" />
+                  <line id="line-1" x1="403" y1="403" x2="518" y2="245" />
+                  <line id="line-2" x1="403" y1="403" x2="589" y2="342" />
+                  <line id="line-3" x1="403" y1="403" x2="589" y2="464" />
+                  <line id="line-4" x1="403" y1="403" x2="518" y2="561" />
+                  <line id="line-5" x1="403" y1="403" x2="403" y2="599" />
+                  <line id="line-6" x1="403" y1="403" x2="288" y2="561" />
+                  <line id="line-7" x1="403" y1="403" x2="217" y2="464" />
+                  <line id="line-8" x1="403" y1="403" x2="217" y2="342" />
+                  <line id="line-9" x1="403" y1="403" x2="288" y2="245" />
                 </svg>
 
                 <!-- Center logo -->
@@ -1493,7 +1494,7 @@
                   </svg>
                 </div>
 
-                <!-- Feature nodes: 9 nodes at 40° increments, radius 277 from centre (402,402). Node is 138px so CSS offset = -69. -->
+                <!-- Feature nodes: 10 nodes at 36° increments, radius 277 from centre (402,402). Node is 138px so CSS offset = -69. -->
                 <!-- 0° -->
                 <div
                   class="feature-node"
@@ -1522,10 +1523,10 @@
                   <span class="fn-label">Proximity<br />detection</span>
                 </div>
 
-                <!-- 40° -->
+                <!-- 36° -->
                 <div
                   class="feature-node"
-                  style="left: 511px; top: 121px"
+                  style="left: 496px; top: 109px"
                   data-index="1"
                 >
                   <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
@@ -1558,10 +1559,10 @@
                   <span class="fn-label">Privacy<br />first</span>
                 </div>
 
-                <!-- 80° — NEW: Private Zones (geo-lock, up to 2 saved areas) -->
+                <!-- 72° — Private Zones (geo-lock, up to 2 saved areas) -->
                 <div
                   class="feature-node"
-                  style="left: 606px; top: 285px"
+                  style="left: 596px; top: 247px"
                   data-index="2"
                 >
                   <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
@@ -1583,10 +1584,10 @@
                   <span class="fn-label">Private<br />Zones</span>
                 </div>
 
-                <!-- 120° -->
+                <!-- 108° -->
                 <div
                   class="feature-node"
-                  style="left: 573px; top: 471px"
+                  style="left: 596px; top: 419px"
                   data-index="3"
                 >
                   <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
@@ -1613,10 +1614,10 @@
                   <span class="fn-label">Go<br />invisible</span>
                 </div>
 
-                <!-- 160° -->
+                <!-- 144° -->
                 <div
                   class="feature-node"
-                  style="left: 428px; top: 593px"
+                  style="left: 496px; top: 557px"
                   data-index="4"
                 >
                   <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
@@ -1648,11 +1649,45 @@
                   <span class="fn-label">Cold<br />DMs</span>
                 </div>
 
-                <!-- 200° -->
+                <!-- 180° — NEW: Winks (one-tap "I noticed you") -->
                 <div
                   class="feature-node"
-                  style="left: 238px; top: 593px"
+                  style="left: 333px; top: 610px"
                   data-index="5"
+                >
+                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <circle
+                      cx="15"
+                      cy="15"
+                      r="12"
+                      fill="rgba(41,208,245,0.18)"
+                      stroke="#29d0f5"
+                      stroke-width="1.5"
+                    />
+                    <circle cx="11" cy="13" r="1.6" fill="#29d0f5" />
+                    <path
+                      d="M16 13 Q19 10.5 22 13"
+                      stroke="#29d0f5"
+                      stroke-width="1.6"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M9.5 18 Q15 22 20.5 18"
+                      stroke="#29d0f5"
+                      stroke-width="1.6"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span class="fn-label">Winks</span>
+                </div>
+
+                <!-- 216° -->
+                <div
+                  class="feature-node"
+                  style="left: 170px; top: 557px"
+                  data-index="6"
                 >
                   <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
                     <polygon
@@ -1666,11 +1701,11 @@
                   <span class="fn-label">Profile<br />boost</span>
                 </div>
 
-                <!-- 240° -->
+                <!-- 252° -->
                 <div
                   class="feature-node"
-                  style="left: 93px; top: 471px"
-                  data-index="6"
+                  style="left: 70px; top: 419px"
+                  data-index="7"
                 >
                   <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
                     <circle
@@ -1694,11 +1729,11 @@
                   <span class="fn-label">Zodiac<br />signs</span>
                 </div>
 
-                <!-- 280° -->
+                <!-- 288° -->
                 <div
                   class="feature-node"
-                  style="left: 60px; top: 285px"
-                  data-index="7"
+                  style="left: 70px; top: 247px"
+                  data-index="8"
                 >
                   <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
                     <path
@@ -1719,11 +1754,11 @@
                   <span class="fn-label">Safety<br />built in</span>
                 </div>
 
-                <!-- 320° -->
+                <!-- 324° -->
                 <div
                   class="feature-node"
-                  style="left: 155px; top: 121px"
-                  data-index="8"
+                  style="left: 170px; top: 109px"
+                  data-index="9"
                 >
                   <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
                     <path
@@ -1787,6 +1822,10 @@
             desc: "Send one cold DM per day to a stranger who caught your attention when you crossed paths. If they reply, the conversation opens up with unlimited messaging. If they do not, the message stays delivered but you cannot follow up — which keeps the experience respectful and spam-free. Premium members get extra daily cold DMs, and every cold DM shows location proof so recipients know the encounter was real.",
           },
           {
+            title: "Winks",
+            desc: "A simple one-tap way to say \"I noticed you\" without the pressure of writing a message. Tap the wink button on someone's profile and they get a friendly notification — no inbox clutter, no awkward opener. Winks are free, unlimited within sensible daily limits, and rate-limited per recipient so nobody gets spammed. If they wink back, it's a soft mutual signal that you've both seen each other — a low-stakes way to break the ice before a real DM.",
+          },
+          {
             title: "Profile boost",
             desc: "For $3.99, pin yourself at the very top of every nearby feed in your area for 24 straight hours. Your profile gets a glowing border and a Featured badge so you instantly stand out at events, conferences, festivals, or anywhere you want to be noticed. A stats panel shows exactly how many views, social unlocks, and DMs your boost earned, and you can stack or schedule boosts from inside the app.",
           },
@@ -1806,7 +1845,7 @@
 
         var activeIndex = -1;
         var nodes = document.querySelectorAll(".feature-node");
-        var lines = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (i) {
+        var lines = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (i) {
           return document.getElementById("line-" + i);
         });
         var panel = document.getElementById("orbitalPanel");
