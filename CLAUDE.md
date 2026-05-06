@@ -13,12 +13,17 @@ python3 -m http.server 8000
 
 ## Project Structure
 - `index.html` — Main landing page (hero, how it works, features, pricing, download CTA)
-- `privacy.html` — Privacy policy
-- `terms.html` — Terms of service
-- `support.html` — FAQ / help center with expandable questions
+- `privacy/index.html` — Privacy policy (served at `/privacy/`)
+- `terms/index.html` — Terms of service (served at `/terms/`)
+- `contact/index.html` — Contact form (served at `/contact/`)
+- `support/index.html` — FAQ / help center with expandable questions (served at `/support/`)
+- `privacy.html`, `terms.html`, `contact.html`, `support.html` — Tiny meta-refresh redirect stubs that bounce old `.html` URLs to the clean folder URLs (kept for backward compatibility with any pre-existing links)
 - `CNAME` — Custom domain config for GitHub Pages (nearapp.io)
 - `nearblue1.png` — Blue logo variant
 - `near white (1).png` — White logo variant
+
+## URL Convention
+Pages use clean, extensionless URLs via the folder pattern (`page/index.html` served as `/page/`). When adding a new top-level page, create `<name>/index.html` and link to it as `/<name>/`. Internal links to assets that live at the site root (logos, screenshots) use root-absolute paths (`/nearblue1.png`) so they resolve correctly from any subfolder.
 
 ## Design System
 - **Colors:** `--navy: #050d1a`, `--blue: #378ADD`, `--red: #E03030`, `--silver: #A8A8A8`, `--white: #ffffff`
