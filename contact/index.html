@@ -402,7 +402,12 @@
     <!-- FORM -->
     <section class="form-section">
       <div class="form-wrap">
-        <form class="contact-form" id="contactForm" novalidate>
+        <form
+          class="contact-form"
+          id="contactForm"
+          action="https://formsubmit.co/sales@nearapp.io"
+          method="POST"
+        >
           <input
             type="text"
             name="_honey"
@@ -415,6 +420,13 @@
               height: 1px;
               opacity: 0;
             "
+          />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+          <input
+            type="hidden"
+            name="_next"
+            value="https://nearapp.io/contact/?sent=1"
           />
 
           <div class="field">
@@ -527,9 +539,18 @@
     </footer>
 
     <script>
+      // If the user comes back via FormSubmit's _next redirect (no-JS fallback path),
+      // show the same success state as the AJAX flow.
+      if (location.search.indexOf("sent=1") !== -1) {
+        var sentForm = document.getElementById("contactForm");
+        var sentSuccess = document.getElementById("formSuccess");
+        if (sentForm) sentForm.hidden = true;
+        if (sentSuccess) sentSuccess.hidden = false;
+      }
+
       document
         .getElementById("contactForm")
-        .addEventListener("submit", async function (e) {
+        .addEventListener("submit", function (e) {
           e.preventDefault();
           var form = e.currentTarget;
           var btn = form.querySelector(".submit-btn");
@@ -537,48 +558,56 @@
           var errorBox = document.getElementById("formError");
           errorBox.hidden = true;
 
-          var subject = form.subject.value.trim();
-          var category = form.category.value;
+          var subject = form.elements.subject.value.trim();
+          var category = form.elements.category.value;
 
-          var payload = {
-            email: form.email.value.trim(),
-            subject: subject,
-            category: category,
-            urgency: form.urgency.value,
-            message: form.message.value.trim(),
-            _subject: "[" + category + "] " + subject,
-            _template: "table",
-            _honey: form._honey.value,
-          };
+          // URL-encoded body keeps this a CORS "simple request" (no preflight),
+          // which behaves identically across Firefox/Safari/Brave/Edge/Chrome.
+          var body = new URLSearchParams();
+          body.append("email", form.elements.email.value.trim());
+          body.append("subject", subject);
+          body.append("category", category);
+          body.append("urgency", form.elements.urgency.value);
+          body.append("message", form.elements.message.value.trim());
+          body.append("_subject", "[" + category + "] " + subject);
+          body.append("_template", "table");
+          body.append("_captcha", "false");
+          body.append("_honey", form.elements._honey.value);
 
           btn.disabled = true;
           var originalBtnText = btn.textContent;
           btn.textContent = "Sending…";
 
-          try {
-            var res = await fetch(
-              "https://formsubmit.co/ajax/sales@nearapp.io",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                },
-                body: JSON.stringify(payload),
-              },
-            );
-            var json = await res.json();
-            if (!res.ok || String(json.success).toLowerCase() !== "true") {
-              throw new Error(json.message || "send failed");
-            }
-            form.hidden = true;
-            successBox.hidden = false;
-            successBox.scrollIntoView({ behavior: "smooth", block: "center" });
-          } catch (err) {
-            errorBox.hidden = false;
-            btn.disabled = false;
-            btn.textContent = originalBtnText;
-          }
+          fetch("https://formsubmit.co/ajax/sales@nearapp.io", {
+            method: "POST",
+            headers: { Accept: "application/json" },
+            body: body,
+          })
+            .then(function (res) {
+              return res.json().then(function (json) {
+                return { ok: res.ok, json: json };
+              });
+            })
+            .then(function (result) {
+              var ok =
+                result.ok &&
+                String(result.json.success).toLowerCase() === "true";
+              if (!ok) {
+                throw new Error(result.json.message || "send failed");
+              }
+              form.hidden = true;
+              successBox.hidden = false;
+              successBox.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+            })
+            .catch(function (err) {
+              console.error("Contact form submit failed:", err);
+              errorBox.hidden = false;
+              btn.disabled = false;
+              btn.textContent = originalBtnText;
+            });
         });
     </script>
   </body>
