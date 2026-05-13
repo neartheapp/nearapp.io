@@ -770,6 +770,8 @@
       }
 
       .pricing-card {
+        display: flex;
+        flex-direction: column;
         border: 1px solid #e5e5e5;
         border-radius: 24px;
         padding: 40px 32px;
@@ -873,6 +875,9 @@
         font-size: 14px;
         text-decoration: none;
         transition: opacity 0.2s;
+        /* Pin button to the bottom of the card so all three columns'
+           CTAs line up horizontally regardless of feature-list length. */
+        margin-top: auto;
       }
 
       .plan-btn-primary {
