@@ -1293,10 +1293,10 @@
     <!-- BILLBOARD -->
     <section class="billboard" id="billboard">
       <div class="billboard-inner">
-        <div class="section-label">WHY NEAR WORKS</div>
+        <div class="billboard-label">WHY NEAR WORKS</div>
         <h2 class="billboard-heading">
-          Walk into a room.<br />
-          Let Nea<span style="color: #378add">r</span> introduce you.
+          Walk into a room. Let Nea<span style="color: #378add">r</span>
+          introduce you.
         </h2>
         <p class="billboard-blueline">You are the ad.</p>
         <div class="billboard-divider"></div>
@@ -1317,23 +1317,32 @@
         padding: 120px 60px;
         text-align: left;
       }
+      .billboard-label {
+        font-family: "DM Sans", sans-serif;
+        font-weight: 400;
+        font-size: 13px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #378add;
+        margin: 0 0 20px;
+      }
       .billboard-heading {
         font-family: "Unbounded", sans-serif;
         font-weight: 700;
         color: #111111;
-        font-size: clamp(36px, 5.5vw, 64px);
-        line-height: 1.1;
-        letter-spacing: -0.02em;
-        margin: 0 0 28px;
+        font-size: 44px;
+        line-height: 1.15;
+        letter-spacing: -2px;
+        margin: 0 0 12px;
       }
       .billboard-blueline {
         font-family: "Unbounded", sans-serif;
-        font-weight: 700;
+        font-weight: 900;
         color: #378add;
-        font-size: clamp(40px, 6vw, 72px);
-        line-height: 1.1;
-        letter-spacing: -0.02em;
-        margin: 0 0 24px;
+        font-size: 56px;
+        line-height: 1;
+        letter-spacing: -3px;
+        margin: 0 0 28px;
       }
       .billboard-divider {
         width: 60px;
@@ -1345,14 +1354,22 @@
         font-family: "DM Sans", sans-serif;
         font-weight: 400;
         color: #666666;
-        font-size: 18px;
-        line-height: 1.6;
-        max-width: 620px;
+        font-size: 17px;
+        line-height: 1.7;
+        max-width: 520px;
         margin: 0;
       }
       @media (max-width: 768px) {
         .billboard-inner {
           padding: 80px 24px;
+        }
+        .billboard-heading {
+          font-size: 32px;
+          letter-spacing: -1.5px;
+        }
+        .billboard-blueline {
+          font-size: 40px;
+          letter-spacing: -2px;
         }
         .billboard-sub {
           font-size: 16px;
